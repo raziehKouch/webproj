@@ -1,6 +1,10 @@
 from django.shortcuts import render
+from .models import post
 
 
 def home(request):
-    return render(request, 'blog/home.html')
+    context = {
+        'posts': post.objects.all()
+    }
+    return render(request, 'blog/home.html', context)
 
