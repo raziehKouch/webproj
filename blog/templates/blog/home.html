@@ -1,6 +1,20 @@
 {% extends "blog/base.html" %}
 {% block content %}
-    <h1>helo helo hellooooo!!</h1>
+    <div class="navbar navbar-expand navbar-light bg-warning mb-3">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="#">Followed Posts</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Recent Posts</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Hot posts</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Contributed</a>
+				</li>
+		</div>
     {% for post in posts %}
         <article class="media content-section">
           <div class="media-body">
