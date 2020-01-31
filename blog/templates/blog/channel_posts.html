@@ -9,12 +9,13 @@
               <a class="mr-2" href="#">{{ post.author }}</a>
               <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
             </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+            <h2><a class="article-title" href="{% url 'edit_post' c.pk %}?next={{ request.path|urlencode }}">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.post_pic }}</p>
             <p class="article-content">{{ post.content }}</p>
           </div>
         </article>
     {% endfor %}
 {% endif %}
-<a  type="button" class="btn btn-warning" href="{% url 'newPost' pk_ch %}">New Post</a>
+<a  type="button" class="btn btn-warning" href="{% url 'newPost' ch_pk %}">New Post</a>
 
 {% endblock content %}

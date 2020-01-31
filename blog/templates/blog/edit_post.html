@@ -1,0 +1,14 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>Create Post</h1>
+
+{% if user.is_authenticated %}
+    <form method="POST" class="post-form" >
+        {% csrf_token %}
+        {{ form |crispy}}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+         <button type="submit" class=" btn btn-warning">Edit Post</button>
+    </form>
+{% endif %}
+{% endblock content %}

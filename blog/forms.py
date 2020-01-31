@@ -15,5 +15,6 @@ class channelForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = post
-        fields = ('title', 'content')
+        fields = ('title', 'content', 'post_pic')
+        exclude = ['chanel']
 

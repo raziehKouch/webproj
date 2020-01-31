@@ -34,14 +34,18 @@ def newChannel(request):
 def newPost(request,pk):
 
     if request.method == "POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             ch = form.save(commit=False)
             ch.author = request.user
-            ch.chanel = Chanel.objects.get(id= pk)
+            c = Chanel.objects.get(id = pk)
             ch.save()
+            print("@@@@@@@@@@@@@@@@@@@ before",c,ch.chanel)
+            ch.chanel = c
+            ch.save()
+            print("@@@@@@@@@@@@@@@@@@@",c,ch.chanel)
 
-            return HttpResponseRedirect('viewPosts', messages.success(request, 'Channel created.'))
+            return HttpResponseRedirect('viewPosts', messages.success(request, 'Post created.'))
     else:
         form = PostForm()
     return render(request, 'blog/newPost.html', {'form': form})
@@ -63,20 +67,36 @@ def edit_channel(request, pk):
         form = channelForm(instance=ch)
     return render(request, 'blog/edit_channel.html', {'form': form})
 
+def edit_post(request, pk):
+    ch = get_object_or_404(post, pk=pk)
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=ch)
+        if form.is_valid():
+            ch = form.save(commit=False)
+            ch.author = request.user
+            ch.save()
+            next = request.POST.get('next', '/')
+            return HttpResponseRedirect(next, messages.success(request, 'Post updated.'))
+
+    else:
+        form = PostForm(instance=ch)
+    return render(request, 'blog/edit_post.html', {'form': form})
+
 
 def viewPosts(request, pk):
-    try:
-        selected_posts = post.objects.get(chanel__id= pk)
-        context = {
-                'posts': selected_posts,
-                'pk_ch': pk
-            }
-        return render(request, 'blog/channel_posts.html', context)
-    except:
-        context = {
-            'pk_ch': pk
-        }
-        return render(request, 'blog/channel_posts.html', context)
+    user = Chanel.objects.only('id').get(id=pk)
+    posts = post.objects.filter ( chanel=user)
+    print("rrrrrrrrrrrrr", posts)
+
+    # c = Chanel.objects.filter(pk = pk)
+    # print(c__id)
+    # posts = post.objects.filter(chanel = c)
+    cX = {
+        'posts':posts,
+         'ch_pk':pk,
+    }
+    return render(request, 'blog/channel_posts.html', cX)
+
 
 def delete_channel(request, id):
     Chanel.objects.filter(id=id).delete()
