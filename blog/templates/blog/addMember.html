@@ -1,0 +1,25 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<h1>Add member to Channel {{channel.title}}</h1>
+
+{% for u in users %}
+        <article class="media content-section">
+
+    <form method="POST" class="post-form" >
+        {% csrf_token %}
+        {{ form |crispy}}
+         <input type="hidden" name="next" value="{{ request.GET.next }}">
+         <button type="submit" class=" btn btn-warning">edit Channel</button>
+    </form>
+
+           <div class="media-body">
+            <h2><a class="article-title">{{ u.username }}</a>
+            </h2>
+
+          </div>
+
+        </article>
+    {% endfor %}
+
+{% endblock content %}
