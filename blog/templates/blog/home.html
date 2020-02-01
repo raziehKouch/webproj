@@ -1,30 +1,78 @@
 {% extends "blog/base.html" %}
 {% block content %}
     <div class="navbar navbar-expand navbar-light bg-warning mb-3">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item">
-					<a class="nav-link" href="#">Followed Posts</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Recent Posts</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Hot posts</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Contributed</a>
-				</li>
-		</div>
-    {% for post in posts %}
-        <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-            </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
-          </div>
-        </article>
-    {% endfor %}
+		<ul class="nav nav-pills mr-auto">
+			<li>
+				<a class="nav-item nav-link active" data-toggle="pill" href="#followed">Followed Posts</a>
+			</li>
+			<li>
+				<a class="nav-item nav-link " data-toggle="pill" href="#recent">Recent Posts</a>
+			</li>
+			<li>
+				<a class="nav-item nav-link " data-toggle="pill" href="#hot">Hot posts</a>
+			</li>
+			<li>
+				<a class="nav-item nav-link " data-toggle="pill" href="#contributed">Contributed</a>
+			</li>
+		</ul>
+	</div>
+
+<div class="tab-content">
+	<div id="followed" class="tab-pane fade in active">
+	{% for post in followed %}
+		<article class="media content-section">
+		  <div class="media-body">
+			<div class="article-metadata">
+			  <a class="mr-2" href="#">{{ post.author }}</a>
+			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+			</div>
+			<h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+			<p class="article-content">{{ post.content }}</p>
+		  </div>
+		</article>
+	{% endfor %}
+	</div>
+	<div id="recent" class="tab-pane fade in">
+	  {% for post in recent %}
+		<article class="media content-section">
+		  <div class="media-body">
+			<div class="article-metadata">
+			  <a class="mr-2" href="#">{{ post.author }}</a>
+			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+			</div>
+			<h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+			<p class="article-content">{{ post.content }}</p>
+		  </div>
+		</article>
+	{% endfor %}
+	</div>
+	<div id="hot" class="tab-pane fade in">
+	{% for post in hot %}
+		<article class="media content-section">
+		  <div class="media-body">
+			<div class="article-metadata">
+			  <a class="mr-2" href="#">{{ post.author }}</a>
+			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+			</div>
+			<h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+			<p class="article-content">{{ post.content }}</p>
+		  </div>
+		</article>
+	{% endfor %}
+	</div>
+	<div id="contributed" class="tab-pane fade in">
+	{% for post in contributed %}
+		<article class="media content-section">
+		  <div class="media-body">
+			<div class="article-metadata">
+			  <a class="mr-2" href="#">{{ post.author }}</a>
+			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+			</div>
+			<h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+			<p class="article-content">{{ post.content }}</p>
+		  </div>
+		</article>
+	{% endfor %}
+	</div>
+</div>
 {% endblock content %}
