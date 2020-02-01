@@ -14,5 +14,5 @@ urlpatterns = [
     path('channels/<int:pk>/newPost', views.newPost, name='newPost'),
     path('channels/<int:id>/delete_channel', views.delete_channel, name='delete_channel'),
     path('channels/<int:id>/addMember', views.addMember, name='addMember'),
-
+    path('search', views.search, name='search'),
 ]

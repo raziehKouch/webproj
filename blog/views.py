@@ -108,3 +108,6 @@ def addMember(request, id, c):
     ch = Chanel.objects.filter(id = c)
     pass
 
+def search(request):
+    return render(request, 'blog/search.html', {})
+
