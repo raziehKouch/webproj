@@ -1,4 +1,17 @@
 {% extends "blog/base.html" %}
+{% block js%}
+
+{% endblock js%}
+$.ajax({
+    url: f'127.0.0.1:8000/channels/{ch_pk}/viewPosts',
+    type: 'get', // This is the default though, you don't actually need to always mention it
+    success: function(data) {
+        alert(data);
+    },
+    failure: function(data) {
+        alert('Got an error dude');
+    }
+});
 {% block content %}
     <h1>Channel Posts</h1>
 {% if posts %}
@@ -9,9 +22,13 @@
               <a class="mr-2" href="#">{{ post.author }}</a>
               <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
             </div>
-            <h2><a class="article-title" href="{% url 'edit_post' post.pk %}?next={{ request.path|urlencode }}">{{ post.title }}</a></h2>
+            <h2><a class="article-title" href="{% url 'view_post' p_pk=post.pk ch_pk=ch_pk %}">{{ post.title }}</a></h2>
+                <a class="glyphicon glyphicon-trash" style="float:right" aria-hidden="true" href="{% url 'delete_post' id=post.pk pk=ch_pk %}"></a>
+                <a class="glyphicon glyphicon-pencil" style="float:right" aria-hidden="true" href="{% url 'edit_post' post.pk %}?next={{ request.path }}"></a>
+
             <p class="article-content">{{ post.post_pic }}</p>
             <p class="article-content">{{ post.content }}</p>
+
           </div>
         </article>
     {% endfor %}
