@@ -158,15 +158,11 @@ def delete_post(request, id, pk=None):
 
 
 
-def view_post(request, p_pk , ch_pk):
+def view_post(request, p_pk):
     mypost= post.objects.filter(id = p_pk)
-    print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", mypost)
-    resp = {'shared_url' : f'127.0.0.1/channels/{ch_pk}/view_post/{p_pk}',
-            'ch_pk':ch_pk,
-            'p_pk':p_pk,
+    resp = {'shared_url' : f'127.0.0.1/view_post/{p_pk}',
             'post': mypost[0]
             }
-    print("rrrrrrrrrrrrr", resp)
     return render(request, 'blog/view_posts.html', resp)
 
 def addMember(request, id, c):
