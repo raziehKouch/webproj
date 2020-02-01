@@ -1,0 +1,113 @@
+{% extends "blog/base.html" %}
+
+
+{% block content %}
+<script>
+    function like()
+{
+alert("hey")
+    var like = document.getElementsByName("hey")
+    var type = like.data('type');
+    var pk = like.data('id');
+    var action = like.data('action');
+    var dislike = like.next();
+    alert(like)
+    alert(type)
+    alert(pk)
+    alert(action)
+    alert(dislike)
+
+    $.ajax({
+        url : "/127.0.0.1:8000/" + type +"/" + pk + "/" + action + "/",
+        type : 'POST',
+        data : { 'obj' : pk },
+
+        success : function (json) {
+            like.find("[data-count='like']").text(json.like_count);
+            dislike.find("[data-count='dislike']").text(json.dislike_count);
+        }
+    });
+
+    return false;
+}
+
+function dislike()
+{
+
+    var dislike = $(this);
+    var type = dislike.data('type');
+    var pk = dislike.data('id');
+    var action = dislike.data('action');
+    var like = dislike.prev();
+
+    $.ajax({
+        url : "/api/" + type +"/" + pk + "/" + action + "/",
+        type : 'POST',
+        data : { 'obj' : pk },
+
+        success : function (json) {
+            dislike.find("[data-count='dislike']").text(json.dislike_count);
+            like.find("[data-count='like']").text(json.like_count);
+        }
+    });
+
+    return false;
+}
+
+// Connecting Handlers
+$(function() {
+    $('[data-action="like"]').click(like);
+    $('[data-action="dislike"]').click(dislike);
+});
+
+
+</script>
+
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ post.author }}</a>
+              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+            </div>
+            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.post_pic }}</p>
+    <a class="likebutton" id="like{{post.id}}" href="#" data-catid="{{ post.id }}">Like</a>
+                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript">
+    $('.likebutton').click(function(){
+    var catid;
+    alert("hi")
+    catid = $(this).attr("data-catid");
+    alert(catid)
+    $.ajax(
+    {
+
+        url: "likepost/",
+        data:{
+                 post_id: catid
+        },
+        success: function( data )
+        {
+            $( '#like'+ catid ).remove();
+            $( '#message' ).text(data);
+        }
+     })
+});
+</script>
+
+              <div>
+<!--    <a type="button" name="hey" data-id="{{ like_obj.id }}" data-type="comment" data-action="like" title="Like" onclick="like()" >-->
+<!--        <span class="glyphicon glyphicon-thumbs-up"></span>-->
+<!--        <span data-count="like">{{ like_obj.votes.likes.count }}</span>-->
+<!--    </a>-->
+<!--    <a type="button" data-id="{{ like_obj.id }}" data-type="comment" data-action="dislike" title="Dislike"  onclick="dislike()" >-->
+<!--        <span class="glyphicon glyphicon-thumbs-down"></span>-->
+<!--        <span data-count="dislike">{{ like_obj.votes.dislikes.count }}</span>-->
+<!--    </a>-->
+</div>
+
+            <p class="article-content">{{ post.content }}</p>
+          </div>
+        </article>
+
+{% endblock content %}

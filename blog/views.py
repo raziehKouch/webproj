@@ -1,9 +1,33 @@
+import json
+
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import post, Chanel
 from .forms import channelForm, PostForm
 from django.contrib import messages
+from django.http import HttpResponse
+from django.views import View
+from django.contrib.contenttypes.models import ContentType
+
+from .models import  Like
+
+
+def likePost(request):
+    print("jjjjjjjjjjjjjjjjjjjjjjjjjjj")
+    if request.method == 'GET':
+
+        post_id = request.GET['post_id']
+        likedpost = post.obejcts.get(pk=post_id)  # getting the liked posts
+        print("llllllllllllllllllll", likedpost)
+        m = Like(post=likedpost)  # Creating Like Object
+        print("mmmmmmmmmmmmmmmmmm", m)
+        m.save()  # saving it to store in database
+        return HttpResponse("Success!")  # Sending an success response
+    else:
+        return HttpResponse("Request method is not a GET")
+
+
 def home(request):
     context = {
         'posts': post.objects.all()
@@ -98,10 +122,42 @@ def viewPosts(request, pk):
     return render(request, 'blog/channel_posts.html', cX)
 
 
-def delete_channel(request, id):
+def delete_channel(request, id, pk):
     Chanel.objects.filter(id=id).delete()
     next = request.POST.get('next', '/channels')
     return HttpResponseRedirect(next)
+
+def delete_post(request, id, pk=None):
+    post.objects.filter(id=id).delete()
+    return render(request, 'blog/channel_posts.html', {'ch_pk':pk})
+
+# def like_post(request, val, p_pk , ch_pk):
+#     mypost = post.objects.filter(id=p_pk)
+#     if val==1:
+#         mypost.like = 1
+#     elif val==2:
+#         mypost.dislike =1
+#     mypost.save()
+#     resp = {'shared_url' : f'127.0.0.1/channels/{ch_pk}/view_post/{p_pk}',
+#             'ch_pk':ch_pk,
+#             'p_pk':p_pk,
+#             'post': mypost,
+#             }
+#     return render(request, 'blog/view_post.html',resp)
+
+
+
+
+def view_post(request, p_pk , ch_pk):
+    mypost= post.objects.filter(id = p_pk)
+    print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", mypost)
+    resp = {'shared_url' : f'127.0.0.1/channels/{ch_pk}/view_post/{p_pk}',
+            'ch_pk':ch_pk,
+            'p_pk':p_pk,
+            'post': mypost[0]
+            }
+    print("rrrrrrrrrrrrr", resp)
+    return render(request, 'blog/view_posts.html', resp)
 
 def addMember(request, id, c):
     u = User.objects.filter(id=id)

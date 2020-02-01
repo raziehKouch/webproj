@@ -3,9 +3,9 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from . import views
-
+from .models import post
 urlpatterns = [
-    path('', views.home , name='blog-home'),
+    path('/home', views.home , name='blog-home'),
     path('channels', views.channel , name='blog-channel'),
     path('newChannel', views.newChannel , name='newChannel'),
     path('channels/<int:pk>/edit/', views.edit_channel, name='edit_channel'),
@@ -13,6 +13,10 @@ urlpatterns = [
     path('channels/<int:pk>/viewPosts', views.viewPosts, name='viewPosts'),
     path('channels/<int:pk>/newPost', views.newPost, name='newPost'),
     path('channels/<int:id>/delete_channel', views.delete_channel, name='delete_channel'),
+    path('channels/<int:id>/delete_post/<int:pk>', views.delete_post, name='delete_post'),
+    path('channels/<int:ch_pk>/view_post/<int:p_pk>', views.view_post, name='view_post'),
+    # path('channels/<int:ch_pk>/like_post/<int:p_pk>/', views.like_post, name='like_post'),
     path('channels/<int:id>/addMember', views.addMember, name='addMember'),
+    url(r'^likepost/$', views.likePost, name='likepost'),
 
 ]
