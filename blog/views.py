@@ -109,5 +109,16 @@ def addMember(request, id, c):
     pass
 
 def search(request):
-    return render(request, 'blog/search.html', {})
+    query = request.GET.get('q')
+    search_posts = post.objects.filter(title__icontains=query)
+    search_users = User.objects.filter(username__icontains=query)
+    # search_users.append(User.objects.filter(last_name__icontains=query))
+    search_channels = Chanel.objects.filter(title__icontains=query)
+    tp = {
+        'query': query,
+        'search_posts': search_posts,
+        'search_users': search_users,
+        'search_channels': search_channels,
+    }
+    return render(request, 'blog/search.html', tp)
 

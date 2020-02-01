@@ -16,26 +16,8 @@
 
 <div class="tab-content">
   <div id="posts" class="tab-pane fade in active">
-    <h3>posts</h3>
-    <p>Some content.</p>
-  </div>
-  <div id="users" class="tab-pane fade in">
-    <h3>users</h3>
-    <p>Some content in menu 1.</p>
-  </div>
-  <div id="channels" class="tab-pane fade in">
-    <h3>channels</h3>
-    <p>Some content in menu 2.</p>
-  </div>
-</div>
-
-
-
-
-
-
-
-    {% for post in posts %}
+    <h3>Posts containing '{{ query }}'</h3>
+    {% for post in search_posts %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
@@ -47,4 +29,43 @@
           </div>
         </article>
     {% endfor %}
+  </div>
+  <div id="users" class="tab-pane fade in">
+      <h3>Users containing '{{ query }}'</h3>
+      {% for user in search_users %}
+        <div class="content-section">
+            <div class="media">
+                <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+                <div class="media-body">
+                  <h2 class="account-heading">{{ user.username }}</h2>
+                  <p class="text-secondary">{{ user.email }}</p>
+                </div>
+            </div>
+        <!-- FORM HERE -->
+        </div>
+      {% endfor %}
+  </div>
+  <div id="channels" class="tab-pane fade in">
+    <h3>Channels containing '{{ query }}'</h3>
+    {% for c in search_channels %}
+        <article class="media content-section">
+           <div class="media-body">
+               <input type="hidden" name="next" value="{{ request.GET.next }}">
+            <h2><a class="article-title" href="{% url 'edit_channel' pk=c.pk %}?next={{ request.path|urlencode }}">{{ c.title }}</a>
+<!--            {% if request.user  in c.admin or c.authors  %}-->
+                <a class="glyphicon glyphicon-trash" style="float:right" aria-hidden="true" href="{% url 'delete_channel' id=c.pk %}"></a>
+                <a class="glyphicon glyphicon-plus" style="float:right" aria-hidden="true" href="{% url 'addMember' id=c.pk %}"></a>
+                <div>
+                    <a  type="button" class="btn btn-warning" href="{% url 'viewPosts' pk=c.pk %}">Posts</a>
+
+                </div>
+<!--            {% endif %}-->
+            </h2>
+            <p class="article-content">{{ post.content }}</p>
+          </div>
+
+        </article>
+    {% endfor %}
+  </div>
+</div>
 {% endblock content %}
