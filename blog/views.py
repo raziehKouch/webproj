@@ -4,11 +4,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import post, Chanel
 from .forms import channelForm, PostForm
 from django.contrib import messages
+from django.utils import timezone
+
 def home(request):
-    followed = post.objects.all()
-    recent = post.objects.all()
-    hot = post.objects.all()
-    contributed = post.objects.all()
+    time_threshold = timezone.now() - timezone.timedelta(days=7)
+    followed = post.objects.all()#todo
+    recent = post.objects.all().order_by('-date_posted')
+    hot = post.objects.filter(date_posted__gt=time_threshold)#todo.order_('-likes')
+    contributed = post.objects.all()#todo
     context = {
         'followed' : followed,
         'recent' : recent,
