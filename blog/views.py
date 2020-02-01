@@ -187,3 +187,5 @@ def search(request):
     }
     return render(request, 'blog/search.html', context)
 
+def notification(request):
+    return render(request, 'blog/notification.html', {})

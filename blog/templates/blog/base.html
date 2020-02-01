@@ -2,28 +2,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-    <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
-    {% if title %}
-        <title>{{ title }}</title>
-    {% else %}
-        <title>blog</title>
-    {%endif %}
-        {%  block js %}{% endblock %}
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+{% if title %}
+    <title>{{ title }}</title>
+{% else %}
+    <title>blog</title>
+{%endif %}
 
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-secondary mb-5">
+        <nav class="navbar navbar-expand-md navbar-light bg-secondary mb-5">
             {% if user.is_authenticated %}
-                <a class="navbar-brand text-warning">{{user.username}}</a>
+                <a class="navbar-brand text-warning" href="{% url 'profile' %}">{{user.username}}</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -33,29 +30,30 @@
                       <li class="nav-item">
                         <a class="nav-link" href="{% url 'blog-home' %}">Home</a>
                       </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-                      </li>
+                      <!--<li class="nav-item">-->
+                        <!--<a class="nav-link" href="{% url 'profile' %}">Profile</a>-->
+                      <!--</li>-->
                       <li class="nav-item">
                         <a class="nav-link" href="{% url 'blog-channel' %}">Channels</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
+                        <a class="nav-link" href="{% url 'notification' %}">Notifications</a>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link text-warning" href="{% url 'logout' %}">Logout</a>
                       </li>
                     </ul>
-                    <form class="form-inline my-2 my-lg-0" style="float:right !important" action="{% url 'search' %}" method="get">
+                    <form class="form-inline my-2 my-lg-0" style="float:right; padding-top:7px" action="{% url 'search' %}" method="get">
                       <input class="form-control mr-sm-2" name="q" type="search"  placeholder="Search" aria-label="Search">
                       <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Search</button>
                     </form>
                 </div>
             {% else %}
-                <a class="navbar-brand text-warning">website name</a>
+                <a class="navbar-brand text-warning">Web Project</a>
             {% endif %}
 		</nav>
     </header>
+
     <main role="main" class="container">
           <div class="row">
             <div class="col-md-8">

@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 from . import views
 from .models import post
 urlpatterns = [
-    path('/home', views.home , name='blog-home'),
+    path('home', views.home , name='blog-home'),
     path('channels', views.channel , name='blog-channel'),
     path('newChannel', views.newChannel , name='newChannel'),
     path('channels/<int:pk>/edit/', views.edit_channel, name='edit_channel'),
@@ -18,6 +18,7 @@ urlpatterns = [
     # path('channels/<int:ch_pk>/like_post/<int:p_pk>/', views.like_post, name='like_post'),
     path('channels/<int:id>/addMember', views.addMember, name='addMember'),
     path('search', views.search, name='search'),
+    path('notification', views.notification, name='notification'),
     url(r'^likepost/$', views.likePost, name='likepost'),
 
 ]
