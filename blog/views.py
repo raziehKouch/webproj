@@ -29,8 +29,15 @@ def likePost(request):
 
 
 def home(request):
+    followed = post.objects.all()
+    recent = post.objects.all()
+    hot = post.objects.all()
+    contributed = post.objects.all()
     context = {
-        'posts': post.objects.all()
+        'followed' : followed,
+        'recent' : recent,
+        'hot' : hot,
+        'contributed' : contributed,
     }
     return render(request, 'blog/home.html', context)
 
@@ -168,13 +175,12 @@ def search(request):
     query = request.GET.get('q')
     search_posts = post.objects.filter(title__icontains=query)
     search_users = User.objects.filter(username__icontains=query)
-    # search_users.append(User.objects.filter(last_name__icontains=query))
     search_channels = Chanel.objects.filter(title__icontains=query)
-    tp = {
+    context = {
         'query': query,
         'search_posts': search_posts,
         'search_users': search_users,
         'search_channels': search_channels,
     }
-    return render(request, 'blog/search.html', tp)
+    return render(request, 'blog/search.html', context)
 
