@@ -13,9 +13,6 @@ class Chanel(models.Model):
     authors = models.ManyToManyField(User, related_name='%(class)s_authors')
     followers = models.ManyToManyField(User, related_name='%(class)s_followers')
 
-    def __str__(self):
-        return self.title
-
 class post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
@@ -23,6 +20,3 @@ class post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE, null=True)
     post_pic = models.ImageField(upload_to='static/blog/image/', null=True, blank=True)
-
-    def __str__(self):
-        return self.title
