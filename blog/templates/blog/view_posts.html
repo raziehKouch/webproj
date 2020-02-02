@@ -70,7 +70,9 @@
               <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
             </div>
             <h2><a class="article-title">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.post_pic }}</p>
+                {% if post.post_pic %}
+            <p class="article-content"><img class="rounded mx-auto d-block" src="{{ post.post_pic.url }}"></p>
+              {% endif %}
     <a class="likebutton" id="like{{post.id}}" href="#" data-catid="{{ post.id }}">Like</a>
                   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script type="text/javascript">
