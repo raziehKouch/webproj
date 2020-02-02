@@ -48,7 +48,7 @@
         <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
 		  <div class="media-body">
 			<div class="article-metadata">
-			  <a class="mr-2" href="{% url 'view_profile' p_pk=post.author.pk %}">{{ post.author }}</a>
+			  <a class="mr-2" href="{% url 'profile' p_pk=post.author.pk %}">{{ post.author }}</a>
 			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
               {% if post.chanel %}
                 <em>in<a class="mr-2" href="{% url 'channel_detail' id=post.chanel.pk %}"> {{ post.chanel.title }}</a></em>
@@ -71,7 +71,7 @@
         <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
 		  <div class="media-body">
 			<div class="article-metadata">
-			  <a class="mr-2" href="{% url 'view_profile' p_pk=post.author.pk %}">{{ post.author }}</a>
+			  <a class="mr-2" href="{% url 'profile' p_pk=post.author.pk %}">{{ post.author }}</a>
 			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
               {% if post.chanel %}
                 <em>in<a class="mr-2" href="{% url 'channel_detail' id=post.chanel.pk %}"> {{ post.chanel.title }}</a></em>
@@ -95,7 +95,7 @@
         <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
 		  <div class="media-body">
 			<div class="article-metadata">
-			  <a class="mr-2" href="{% url 'view_profile' p_pk=post.author.pk %}">{{ post.author }}</a>
+			  <a class="mr-2" href="{% url 'profile' p_pk=post.author.pk %}">{{ post.author }}</a>
 			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
               {% if post.chanel %}
                 <em>in<a class="mr-2" href="{% url 'channel_detail' id=post.chanel.pk %}"> {{ post.chanel.title }}</a></em>

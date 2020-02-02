@@ -18,10 +18,12 @@ class profile(models.Model):
         follower_set = follow.objects.filter(following=self.user)
         return follower_set
 
-
+#follow model
 class follow(models.Model):
     follower = models.ForeignKey(User, related_name="follower", on_delete=models.CASCADE)
     following = models.ForeignKey(User, related_name="friend_set", on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.follower} followed {self.following}'
+
+
