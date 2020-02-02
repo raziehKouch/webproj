@@ -10,7 +10,6 @@ urlpatterns = [
     path('newChannel', views.newChannel , name='newChannel'),
     path('channels/<int:pk>/edit/', views.edit_channel, name='edit_channel'),
     path('channels/<int:pk>/editpost/', views.edit_post, name='edit_post'),
-    path('channels/<int:pk>/viewPosts', views.viewPosts, name='viewPosts'),
     path('channels/<int:id>/Channeldetail', views.channel_detail, name='channel_detail'),
     path('channels/<int:pk>/newPost', views.newPost, name='newPost'),
     path('channels/<int:id>/delete_channel', views.delete_channel, name='delete_channel'),

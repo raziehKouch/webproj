@@ -2,7 +2,6 @@
 {% block content %}
 
     <h1>Channels</h1>
-
     {% for c in channels %}
         <article class="media content-section">
            <div class="media-body">
@@ -12,17 +11,12 @@
                 <a class="glyphicon glyphicon-trash" style="float:right" aria-hidden="true" href="{% url 'delete_channel' id=c.pk %}"></a>
                 <a class="glyphicon glyphicon-pencil" style="float:right" aria-hidden="true" href="{% url 'edit_channel' pk=c.pk %}?next={{ request.path|urlencode }}"></a>
                 <a class="glyphicon glyphicon-plus" style="float:right" aria-hidden="true" href="{% url 'addMember' id=c.pk %}"></a>
-                <div>
-                    <a  type="button" class="btn btn-warning" href="{% url 'viewPosts' pk=c.pk %}">Posts</a>
-
-                </div>
 <!--            {% endif %}-->
             </h2>
             <p class="article-content">{{ post.content }}</p>
           </div>
-
         </article>
     {% endfor %}
 
-<a  type="button" class="btn btn-warning" href="{% url 'newChannel' %}">New Channel</a>
+<a type="button" class="btn btn-warning" href="{% url 'newChannel' %}">New Channel</a>
 {% endblock content %}
