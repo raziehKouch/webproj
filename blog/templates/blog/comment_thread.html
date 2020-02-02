@@ -1,6 +1,6 @@
 {% extends "blog/base.html" %}
 
-{% load crispy_forms_tags %}
+
 {% block content %}
 
         <article class="media content-section">
@@ -24,27 +24,7 @@
             <p class="article-content">{{ post.content }}</p>
           </div>
 
-
-
+            {{object}}
         </article>
-<article class="media content-section">
-<div class="media-body">
-        <p class="lead">Comments <br>
-
-    <form method="POST">
-        {% csrf_token %}
-        {{ form |crispy}}
-        <input type="submit"class=" btn btn-warning"  value="send">
-    </form>
-<!--        {{ post.comments }}-->
-
-            {% for comment in post.comments %}
-            <div>{{comment.content}}</div>
-    <footer>{{comment.user}} | {{comment.timestamp}}</footer>
-
-            {% endfor %}
-    </p>
-</div>
-</article>
 
 {% endblock content %}

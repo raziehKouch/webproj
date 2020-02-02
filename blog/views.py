@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import post, Chanel
-from .forms import channelForm, PostForm
+from .forms import channelForm, PostForm, CommentForm
 from django.contrib import messages
 from django.utils import timezone
 
@@ -13,8 +13,13 @@ from django.views import View
 from django.contrib.contenttypes.models import ContentType
 
 from .models import  Like
+from .models import Comment
 
-
+...
+def comment_thread(request,id):
+    obj = get_object_or_404(Comment, id=id)
+    context = {'object':obj}
+    return render(request, 'blog/comment_thread.html')
 def likePost(request):
     print("jjjjjjjjjjjjjjjjjjjjjjjjjjj")
     if request.method == 'GET':
@@ -122,12 +127,10 @@ def viewPosts(request, pk):
     posts = post.objects.filter ( chanel=user)
     print("rrrrrrrrrrrrr", posts)
 
-    # c = Chanel.objects.filter(pk = pk)
-    # print(c__id)
-    # posts = post.objects.filter(chanel = c)
     cX = {
         'posts':posts,
          'ch_pk':pk,
+
     }
     return render(request, 'blog/channel_posts.html', cX)
 
@@ -160,16 +163,40 @@ def delete_post(request, id, pk=None):
 
 def view_post(request, p_pk):
     mypost= post.objects.filter(id = p_pk)
+    # ct = ContentType.objects.get_for_model(post)
+    # ide = mypost[0].id
+
+    c = Comment.objects.filter_by_instance(mypost[0])
+
+    initial_data={
+        "content_type":mypost[0].get_content_type,
+        "object_id":mypost[0].id,
+    }
+    form = CommentForm(request.POST or None, initial=initial_data)
     resp = {'shared_url' : f'127.0.0.1/view_post/{p_pk}',
-            'post': mypost[0]
+            'post': mypost[0],
+            'comments': c,
+            'form': form,
             }
+    if form.is_valid():
+        c_type = form.cleaned_data.get("content_type")
+        object_id = form.cleaned_data.get("object_id")
+        content_data = form.cleaned_data.get("content")
+        content_type = ContentType.objects.get(model = c_type)
+        new_comment , created = Comment.objects.get_or_create(user = request.user, content_type = content_type, object_id=object_id, content = content_data, )
+        if created:
+            print("worked")
+        return redirect('view_post', mypost[0].id)
+
     return render(request, 'blog/view_posts.html', resp)
 
 
 def channel_detail(request, id):
     c= Chanel.objects.filter(id = id)
     print("cccccccccccccccccccccccccccc",c)
-    return render(request, 'blog/channel_detail.html', {'c':c[0]})
+    follower = c[0].get_followers().count()
+    print("qqqqqqqqqqqqqqqqqqqqqqqqq", follower)
+    return render(request, 'blog/channel_detail.html', {'c':c[0], 'followers':follower})
 
 # def addMember(request, id):
 #     c = Chanel.objects.filter(id=id)
