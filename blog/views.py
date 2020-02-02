@@ -77,7 +77,7 @@ def newPost(request,pk):
             ch.save()
             print("@@@@@@@@@@@@@@@@@@@",c,ch.chanel)
 
-            return HttpResponseRedirect('viewPosts', messages.success(request, 'Post created.'))
+            return HttpResponseRedirect('channel_detail', messages.success(request, 'Post created.'))
     else:
         form = PostForm()
     return render(request, 'blog/newPost.html', {'form': form})

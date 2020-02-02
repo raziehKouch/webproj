@@ -6,13 +6,7 @@
         <article class="media content-section">
            <div class="media-body">
                <input type="hidden" name="next" value="{{ request.GET.next }}">
-            <h2><a class="article-title" href="{% url 'channel_detail' id=c.pk %}">{{ c.title }}</a>
-<!--            {% if request.user  in c.admin or c.authors  %}-->
-                <a class="glyphicon glyphicon-trash" style="float:right" aria-hidden="true" href="{% url 'delete_channel' id=c.pk %}"></a>
-                <a class="glyphicon glyphicon-pencil" style="float:right" aria-hidden="true" href="{% url 'edit_channel' pk=c.pk %}?next={{ request.path|urlencode }}"></a>
-                <a class="glyphicon glyphicon-plus" style="float:right" aria-hidden="true" href="{% url 'addMember' id=c.pk %}"></a>
-<!--            {% endif %}-->
-            </h2>
+            <h2><a class="article-title" href="{% url 'channel_detail' id=c.pk %}">{{ c.title }}</a></h2>
             <p class="article-content">{{ post.content }}</p>
           </div>
         </article>
