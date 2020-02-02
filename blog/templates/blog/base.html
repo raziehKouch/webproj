@@ -20,7 +20,7 @@
     <!--<header>-->
         <nav class="navbar navbar-expand-md navbar-light bg-secondary mb-5">
             {% if user.is_authenticated %}
-                <a class="navbar-brand text-warning" href="{% url 'profile' %}">{{user.username}}</a>
+                <a class="navbar-brand text-warning" href="{% url 'xprofile' %}">{{user.username}}</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -30,9 +30,6 @@
                       <li class="nav-item">
                         <a class="nav-link" href="{% url 'blog-home' %}">Home</a>
                       </li>
-                      <!--<li class="nav-item">-->
-                        <!--<a class="nav-link" href="{% url 'profile' %}">Profile</a>-->
-                      <!--</li>-->
                       <li class="nav-item">
                         <a class="nav-link" href="{% url 'blog-channel' %}">Channels</a>
                       </li>

@@ -2,66 +2,66 @@
 
 
 {% block content %}
-<script>
-    function like()
-{
-alert("hey")
-    var like = document.getElementsByName("hey")
-    var type = like.data('type');
-    var pk = like.data('id');
-    var action = like.data('action');
-    var dislike = like.next();
-    alert(like)
-    alert(type)
-    alert(pk)
-    alert(action)
-    alert(dislike)
+<!--<script>-->
+    <!--function like()-->
+<!--{-->
+<!--alert("hey")-->
+    <!--var like = document.getElementsByName("hey")-->
+    <!--var type = like.data('type');-->
+    <!--var pk = like.data('id');-->
+    <!--var action = like.data('action');-->
+    <!--var dislike = like.next();-->
+    <!--alert(like)-->
+    <!--alert(type)-->
+    <!--alert(pk)-->
+    <!--alert(action)-->
+    <!--alert(dislike)-->
 
-    $.ajax({
-        url : "/127.0.0.1:8000/" + type +"/" + pk + "/" + action + "/",
-        type : 'POST',
-        data : { 'obj' : pk },
+    <!--$.ajax({-->
+        <!--url : "/127.0.0.1:8000/" + type +"/" + pk + "/" + action + "/",-->
+        <!--type : 'POST',-->
+        <!--data : { 'obj' : pk },-->
 
-        success : function (json) {
-            like.find("[data-count='like']").text(json.like_count);
-            dislike.find("[data-count='dislike']").text(json.dislike_count);
-        }
-    });
+        <!--success : function (json) {-->
+            <!--like.find("[data-count='like']").text(json.like_count);-->
+            <!--dislike.find("[data-count='dislike']").text(json.dislike_count);-->
+        <!--}-->
+    <!--});-->
 
-    return false;
-}
+    <!--return false;-->
+<!--}-->
 
-function dislike()
-{
+<!--function dislike()-->
+<!--{-->
 
-    var dislike = $(this);
-    var type = dislike.data('type');
-    var pk = dislike.data('id');
-    var action = dislike.data('action');
-    var like = dislike.prev();
+    <!--var dislike = $(this);-->
+    <!--var type = dislike.data('type');-->
+    <!--var pk = dislike.data('id');-->
+    <!--var action = dislike.data('action');-->
+    <!--var like = dislike.prev();-->
 
-    $.ajax({
-        url : "/api/" + type +"/" + pk + "/" + action + "/",
-        type : 'POST',
-        data : { 'obj' : pk },
+    <!--$.ajax({-->
+        <!--url : "/api/" + type +"/" + pk + "/" + action + "/",-->
+        <!--type : 'POST',-->
+        <!--data : { 'obj' : pk },-->
 
-        success : function (json) {
-            dislike.find("[data-count='dislike']").text(json.dislike_count);
-            like.find("[data-count='like']").text(json.like_count);
-        }
-    });
+        <!--success : function (json) {-->
+            <!--dislike.find("[data-count='dislike']").text(json.dislike_count);-->
+            <!--like.find("[data-count='like']").text(json.like_count);-->
+        <!--}-->
+    <!--});-->
 
-    return false;
-}
+    <!--return false;-->
+<!--}-->
 
-// Connecting Handlers
-$(function() {
-    $('[data-action="like"]').click(like);
-    $('[data-action="dislike"]').click(dislike);
-});
+<!--// Connecting Handlers-->
+<!--$(function() {-->
+    <!--$('[data-action="like"]').click(like);-->
+    <!--$('[data-action="dislike"]').click(dislike);-->
+<!--});-->
 
 
-</script>
+<!--</script>-->
 
         <article class="media content-section">
           <div class="media-body">
