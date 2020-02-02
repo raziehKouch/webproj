@@ -24,7 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),
     path('register/', user_views.register, name='register'),
-    path('xprofile/', user_views.xprofile, name='xprofile'),
+    path('edit_profile/', user_views.editprofile, name='profile-edit'),
+    path('profile/<int:p_pk>', user_views.profile, name='profile'),
     path('', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('password_reset/',
@@ -39,7 +40,6 @@ urlpatterns = [
     path('password_reset_compelete/',
          auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
          name='password_reset_complete'),
-    path('view_profile/<int:p_pk>', user_views.view_profile, name='view_profile'),
 ]
 
 if settings.DEBUG:

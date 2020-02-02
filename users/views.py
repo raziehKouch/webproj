@@ -1,17 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .forms import UserRegisterForm, profileupdateform, UserUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm, profileupdateform
 from django.contrib.auth.decorators import login_required
 from .models import profile
 from django.contrib.auth.models import User
-
-def view_profile(request, p_pk):
-    myuser = User.objects.get(id = p_pk)
-    resp = {'shared_url' : f'127.0.0.1/view_profile/{p_pk}',
-            'this_user': myuser
-            }
-    return render(request, 'users/view_profile.html', resp)
+from blog.models import post
 
 
 def register(request):
@@ -26,8 +20,9 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
+
 @login_required
-def xprofile(request):
+def editprofile(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST ,instance=request.user)
         p_form = profileupdateform(request.POST ,request.FILES, instance=request.user.profile)
@@ -39,8 +34,29 @@ def xprofile(request):
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = profileupdateform(instance=request.user.profile)
+        following_count = request.user.profile.get_followings().count()
+        follower_count = request.user.profile.get_followers().count()
+        post_count = post.objects.filter(author = request.user ).count()
     context = {
         'u_form': u_form,
         'p_form': p_form,
+        'following_count' : following_count,
+        'follower_count' : follower_count,
+        'post_count': post_count,
+    }
+    return render(request, 'users/profile_edit.html', context)
+
+def profile(request, p_pk):
+    ruser = User.objects.get(pk = p_pk)
+    following_count = ruser.profile.get_followings().count()
+    follower_count = ruser.profile.get_followers().count()
+    post_count = post.objects.filter(author=ruser).count()
+    posts = post.objects.filter(author=ruser)
+    context = {
+        'requested_user': ruser,
+        'following_count' : following_count,
+        'follower_count' : follower_count,
+        'post_count': post_count,
+        'posts' : posts
     }
     return render(request, 'users/profile.html', context)

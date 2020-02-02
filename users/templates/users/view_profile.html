@@ -7,6 +7,10 @@
         <div class="media-body">
           <h2 class="account-heading">{{ this_user.username }}</h2>
           <p class="text-secondary">{{ this_user.email }}</p>
+            <div>
+                <h1>{{ this_user.profile.get_followings().count() }}</h1>
+                <small class="taxt-muted"> followings</small>
+            </div>
         </div>
       </div>
       <!-- FORM HERE -->
