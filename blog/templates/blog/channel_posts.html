@@ -25,8 +25,9 @@ $.ajax({
             <h2><a class="article-title" href="{% url 'view_post' p_pk=post.pk %}">{{ post.title }}</a></h2>
                 <a class="glyphicon glyphicon-trash" style="float:right" aria-hidden="true" href="{% url 'delete_post' id=post.pk pk=ch_pk %}"></a>
                 <a class="glyphicon glyphicon-pencil" style="float:right" aria-hidden="true" href="{% url 'edit_post' post.pk %}?next={{ request.path }}"></a>
-
-            <p class="article-content">{{ post.post_pic }}</p>
+            {% if post.post_pic %}
+            <p class="article-content"><img class="rounded mx-auto d-block" src="{{ post.post_pic.url }}"></p>
+              {% endif %}
             <p class="article-content">{{ post.content }}</p>
 
           </div>
