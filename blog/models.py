@@ -48,7 +48,7 @@ class Chanel(models.Model):
     followers = models.ManyToManyField(User, related_name='%(class)s_followers')
 
     def get_followers(self):
-        follower_set = follow.objects.filter(following_channel=self)
+        follower_set = subscribe.objects.filter(following_channel=self)
         return follower_set
 
 
@@ -72,11 +72,11 @@ class post(models.Model):
         return ct
 
 
-class follow(models.Model):
-    subscriber = models.ForeignKey(User, related_name="subscriber", on_delete=models.CASCADE)
-    following_channel = models.ForeignKey(Chanel, related_name="friend_set", on_delete=models.CASCADE)
-    def __str__(self):
-        return f'{self.follower} followed {self.following}'
+class subscribe(models.Model):
+        subscriber = models.ForeignKey(User, related_name="subscriber", on_delete=models.CASCADE)
+        following_channel = models.ForeignKey(Chanel, related_name="friend_set", on_delete=models.CASCADE)
+        def __str__(self):
+            return f'{self.follower} followed {self.following}'
 
 class Like(models.Model):
         post = models.ForeignKey(post, on_delete=models.CASCADE)
