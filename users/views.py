@@ -3,6 +3,15 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegisterForm, profileupdateform, UserUpdateForm
 from django.contrib.auth.decorators import login_required
+from .models import profile
+from django.contrib.auth.models import User
+
+def view_profile(request, p_pk):
+    myuser = User.objects.get(id = p_pk)
+    resp = {'shared_url' : f'127.0.0.1/view_profile/{p_pk}',
+            'this_user': myuser
+            }
+    return render(request, 'users/view_profile.html', resp)
 
 
 def register(request):
@@ -18,7 +27,7 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 @login_required
-def profile(request):
+def xprofile(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST ,instance=request.user)
         p_form = profileupdateform(request.POST ,request.FILES, instance=request.user.profile)
