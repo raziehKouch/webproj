@@ -109,7 +109,6 @@ def edit_post(request, pk):
             ch.save()
             next = request.POST.get('next', '/')
             return HttpResponseRedirect(next, messages.success(request, 'Post updated.'))
-
     else:
         form = PostForm(instance=ch)
     return render(request, 'blog/edit_post.html', {'form': form})
