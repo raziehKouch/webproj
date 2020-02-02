@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 def view_profile(request, p_pk):
     myuser = User.objects.get(id = p_pk)
     resp = {'shared_url' : f'127.0.0.1/view_profile/{p_pk}',
-            'user': myuser
+            'this_user': myuser
             }
     return render(request, 'users/view_profile.html', resp)
 
