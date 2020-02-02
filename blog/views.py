@@ -52,7 +52,6 @@ def channel(request):
     return render(request, 'blog/channel.html', context)
 
 def newChannel(request):
-
     if request.method == "POST":
         form = channelForm(request.POST)
         if form.is_valid():
@@ -66,7 +65,6 @@ def newChannel(request):
     return render(request, 'blog/newChannel.html', {'form': form})
 
 def newPost(request,pk):
-
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -79,7 +77,7 @@ def newPost(request,pk):
             ch.save()
             print("@@@@@@@@@@@@@@@@@@@",c,ch.chanel)
 
-            return HttpResponseRedirect('viewPosts', messages.success(request, 'Post created.'))
+            return HttpResponseRedirect('channel_detail', messages.success(request, 'Post created.'))
     else:
         form = PostForm()
     return render(request, 'blog/newPost.html', {'form': form})
@@ -111,26 +109,20 @@ def edit_post(request, pk):
             ch.save()
             next = request.POST.get('next', '/')
             return HttpResponseRedirect(next, messages.success(request, 'Post updated.'))
-
     else:
         form = PostForm(instance=ch)
     return render(request, 'blog/edit_post.html', {'form': form})
 
 
-def viewPosts(request, pk):
-    user = Chanel.objects.only('id').get(id=pk)
-    posts = post.objects.filter ( chanel=user)
-    print("rrrrrrrrrrrrr", posts)
-
-    # c = Chanel.objects.filter(pk = pk)
-    # print(c__id)
-    # posts = post.objects.filter(chanel = c)
-    cX = {
-        'posts':posts,
-         'ch_pk':pk,
+def channel_detail(request, id):
+    user = Chanel.objects.only('id').get(id=id)
+    posts = post.objects.filter(chanel=user)
+    context = {
+        'c' : Chanel.objects.filter(id = id)[0],
+        'posts': posts,
+        'ch_pk': id,
     }
-    return render(request, 'blog/channel_posts.html', cX)
-
+    return render(request, 'blog/channel_detail.html', context)
 
 def delete_channel(request, id, pk):
     Chanel.objects.filter(id=id).delete()
@@ -139,7 +131,9 @@ def delete_channel(request, id, pk):
 
 def delete_post(request, id, pk=None):
     post.objects.filter(id=id).delete()
-    return render(request, 'blog/channel_posts.html', {'ch_pk':pk})
+    if pk:
+        return render(request, 'blog/channel_detail.html', {'ch_pk':pk})
+    return #todo
 
 # def like_post(request, val, p_pk , ch_pk):
 #     mypost = post.objects.filter(id=p_pk)
@@ -166,10 +160,6 @@ def view_post(request, p_pk):
     return render(request, 'blog/view_posts.html', resp)
 
 
-def channel_detail(request, id):
-    c= Chanel.objects.filter(id = id)
-    print("cccccccccccccccccccccccccccc",c)
-    return render(request, 'blog/channel_detail.html', {'c':c[0]})
 
 # def addMember(request, id):
 #     c = Chanel.objects.filter(id=id)

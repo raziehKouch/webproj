@@ -20,64 +20,94 @@
 <div class="tab-content">
 	<div id="followed" class="tab-pane fade in active">
 	{% for post in followed %}
+        <!--post preview-->
 		<article class="media content-section">
-			<img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+        <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
 		  <div class="media-body">
 			<div class="article-metadata">
 			  <a class="mr-2" href="{% url 'profile' p_pk=post.author.pk %}">{{ post.author }}</a>
 			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
               {% if post.chanel %}
-                <em>in<a class="mr-2" href="#"> {{ post.chanel.title }}</a></em>
+                <em>in<a class="mr-2" href="{% url 'channel_detail' id=post.chanel.pk %}"> {{ post.chanel.title }}</a></em>
               {% endif %}
+              <small class="text-muted" style="float:right">10 likes (todo)</small>
 			</div>
 			<h2><a class="article-title" href="{% url 'view_post' p_pk=post.pk %}">{{ post.title }}</a></h2>
-			<p class="article-content">{{ post.content }}</p>
-		  </div>
+			{% if post.post_pic %}
+              <p class="article-content"><img class="rounded mx-auto d-block" src="{{ post.post_pic.url }}"></p>
+            {% endif %}
+            <p class="article-content">{{ post.content }}</p>
+          </div>
 		</article>
 	{% endfor %}
 	</div>
 	<div id="recent" class="tab-pane fade in">
 	  {% for post in recent %}
+		<!--post preview-->
 		<article class="media content-section">
-			<img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+        <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
 		  <div class="media-body">
 			<div class="article-metadata">
-			  <a class="mr-2" href="#">{{ post.author }}</a>
+			  <a class="mr-2" href="{% url 'view_profile' p_pk=post.author.pk %}">{{ post.author }}</a>
 			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+              {% if post.chanel %}
+                <em>in<a class="mr-2" href="{% url 'channel_detail' id=post.chanel.pk %}"> {{ post.chanel.title }}</a></em>
+              {% endif %}
+              <small class="text-muted" style="float:right">10 likes (todo)</small>
 			</div>
 			<h2><a class="article-title" href="{% url 'view_post' p_pk=post.pk %}">{{ post.title }}</a></h2>
-			<p class="article-content">{{ post.content }}</p>
-		  </div>
+			{% if post.post_pic %}
+              <p class="article-content"><img class="rounded mx-auto d-block" src="{{ post.post_pic.url }}"></p>
+            {% endif %}
+            <p class="article-content">{{ post.content }}</p>
+          </div>
 		</article>
 	{% endfor %}
 	</div>
 	<div id="hot" class="tab-pane fade in">
 	{% for post in hot %}
+		<!--post preview-->
 		<article class="media content-section">
-			<img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+        <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
 		  <div class="media-body">
 			<div class="article-metadata">
-			  <a class="mr-2" href="#">{{ post.author }}</a>
+			  <a class="mr-2" href="{% url 'view_profile' p_pk=post.author.pk %}">{{ post.author }}</a>
 			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+              {% if post.chanel %}
+                <em>in<a class="mr-2" href="{% url 'channel_detail' id=post.chanel.pk %}"> {{ post.chanel.title }}</a></em>
+              {% endif %}
+              <small class="text-muted" style="float:right">10 likes (todo)</small>
 			</div>
 			<h2><a class="article-title" href="{% url 'view_post' p_pk=post.pk %}">{{ post.title }}</a></h2>
-			<p class="article-content">{{ post.content }}</p>
-		  </div>
+			{% if post.post_pic %}
+              <p class="article-content"><img class="rounded mx-auto d-block" src="{{ post.post_pic.url }}"></p>
+            {% endif %}
+            <p class="article-content">{{ post.content }}</p>
+          </div>
 		</article>
 	{% endfor %}
 	</div>
 	<div id="contributed" class="tab-pane fade in">
 	{% for post in contributed %}
+		<!--post preview-->
+		<!--post preview-->
 		<article class="media content-section">
-			<img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+        <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
 		  <div class="media-body">
 			<div class="article-metadata">
-			  <a class="mr-2" href="#">{{ post.author }}</a>
+			  <a class="mr-2" href="{% url 'view_profile' p_pk=post.author.pk %}">{{ post.author }}</a>
 			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+              {% if post.chanel %}
+                <em>in<a class="mr-2" href="{% url 'channel_detail' id=post.chanel.pk %}"> {{ post.chanel.title }}</a></em>
+              {% endif %}
+              <small class="text-muted" style="float:right">10 likes (todo)</small>
 			</div>
-			<h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-			<p class="article-content">{{ post.content }}</p>
-		  </div>
+			<h2><a class="article-title" href="{% url 'view_post' p_pk=post.pk %}">{{ post.title }}</a></h2>
+			{% if post.post_pic %}
+              <p class="article-content"><img class="rounded mx-auto d-block" src="{{ post.post_pic.url }}"></p>
+            {% endif %}
+            <p class="article-content">{{ post.content }}</p>
+          </div>
 		</article>
 	{% endfor %}
 	</div>

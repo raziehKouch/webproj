@@ -73,6 +73,11 @@
                 {% if post.post_pic %}
             <p class="article-content"><img class="rounded mx-auto d-block" src="{{ post.post_pic.url }}"></p>
               {% endif %}
+
+              <a class="glyphicon glyphicon-trash" style="float:right" aria-hidden="true" href="{% url 'delete_post' id=post.pk %}"></a>
+            <a class="glyphicon glyphicon-pencil" style="float:right" aria-hidden="true" href="{% url 'edit_post' post.pk %}?next={{ request.path }}"></a>
+
+
     <a class="likebutton" id="like{{post.id}}" href="#" data-catid="{{ post.id }}">Like</a>
                   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script type="text/javascript">
