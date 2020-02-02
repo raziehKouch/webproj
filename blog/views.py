@@ -139,7 +139,9 @@ def delete_channel(request, id, pk):
 
 def delete_post(request, id, pk=None):
     post.objects.filter(id=id).delete()
-    return render(request, 'blog/channel_posts.html', {'ch_pk':pk})
+    if pk:
+        return render(request, 'blog/channel_posts.html', {'ch_pk':pk})
+    return #todo
 
 # def like_post(request, val, p_pk , ch_pk):
 #     mypost = post.objects.filter(id=p_pk)
