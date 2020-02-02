@@ -165,6 +165,20 @@ def view_post(request, p_pk):
             }
     return render(request, 'blog/view_posts.html', resp)
 
+
+def channel_detail(request, id):
+    c= Chanel.objects.filter(id = id)
+    print("cccccccccccccccccccccccccccc",c)
+    return render(request, 'blog/channel_detail.html', {'c':c[0]})
+
+# def addMember(request, id):
+#     c = Chanel.objects.filter(id=id)
+#     c.author.add(request.user)
+#     c.save()
+#     return render(request, 'blog/channel.html', )
+#     # ch = Chanel.objects.filter(id = c)
+#     # pass
+
 def addMember(request, id, c):
     u = User.objects.filter(id=id)
     ch = Chanel.objects.filter(id = c)
