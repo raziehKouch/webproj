@@ -23,8 +23,11 @@
 		<article class="media content-section">
 		  <div class="media-body">
 			<div class="article-metadata">
-			  <a class="mr-2" href="#">{{ post.author }}</a>
+			  <a class="mr-2" href="{% url 'view_profile' p_pk=post.author.pk %}">{{ post.author }}</a>
 			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+              {% if post.chanel %}
+                <em>in<a class="mr-2" href="#"> {{ post.chanel.title }}</a></em>
+              {% endif %}
 			</div>
 			<h2><a class="article-title" href="{% url 'view_post' p_pk=post.pk %}">{{ post.title }}</a></h2>
 			<p class="article-content">{{ post.content }}</p>
