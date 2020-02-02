@@ -14,7 +14,9 @@
             </div>
         </form>
         <div class="border-top pt-3">
-            <small class="text-muted">need an account?<a href="{% url 'register' %}">sign up</a> </small>
+            <small class="text-muted"><a href="{% url 'password_reset' %}">forgot password?</a> </small>
+            <small class="text-muted ml-2 ">need an account?<a href="{% url 'register' %}">sign up</a> </small>
         </div>
+
     </div>
 {% endblock content %}
