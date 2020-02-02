@@ -6,6 +6,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import post, Chanel
 from .forms import channelForm, PostForm
 from django.contrib import messages
+from django.utils import timezone
+
 from django.http import HttpResponse
 from django.views import View
 from django.contrib.contenttypes.models import ContentType
@@ -29,10 +31,11 @@ def likePost(request):
 
 
 def home(request):
-    followed = post.objects.all()
-    recent = post.objects.all()
-    hot = post.objects.all()
-    contributed = post.objects.all()
+    time_threshold = timezone.now() - timezone.timedelta(days=7)
+    followed = post.objects.all()#todo
+    recent = post.objects.all().order_by('-date_posted')
+    hot = post.objects.filter(date_posted__gt=time_threshold)#todo.order_('-likes')
+    contributed = post.objects.all()#todo
     context = {
         'followed' : followed,
         'recent' : recent,
@@ -155,15 +158,11 @@ def delete_post(request, id, pk=None):
 
 
 
-def view_post(request, p_pk , ch_pk):
+def view_post(request, p_pk):
     mypost= post.objects.filter(id = p_pk)
-    print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", mypost)
-    resp = {'shared_url' : f'127.0.0.1/channels/{ch_pk}/view_post/{p_pk}',
-            'ch_pk':ch_pk,
-            'p_pk':p_pk,
+    resp = {'shared_url' : f'127.0.0.1/view_post/{p_pk}',
             'post': mypost[0]
             }
-    print("rrrrrrrrrrrrr", resp)
     return render(request, 'blog/view_posts.html', resp)
 
 def addMember(request, id, c):
@@ -184,3 +183,5 @@ def search(request):
     }
     return render(request, 'blog/search.html', context)
 
+def notification(request):
+    return render(request, 'blog/notification.html', {})
