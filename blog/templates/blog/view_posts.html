@@ -41,7 +41,12 @@
             {% for comment in post.comments %}
             <div>{{comment.content}}</div>
     <footer>{{comment.user}} | {{comment.timestamp}}</footer>
-
+  <form method="POST">
+        {% csrf_token %}
+        {{ form |crispy}}
+      <input type="hidden" name="parent_id" value="{{ comment.id }}">
+        <input type="submit"class=" btn btn-warning"  value="reply">
+    </form>
             {% endfor %}
     </p>
 </div>

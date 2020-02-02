@@ -182,6 +182,10 @@ def view_post(request, p_pk):
         c_type = form.cleaned_data.get("content_type")
         object_id = form.cleaned_data.get("object_id")
         content_data = form.cleaned_data.get("content")
+        try:
+            parent_id = int(request.POST.get("parent_id"))
+        except:
+            pass
         content_type = ContentType.objects.get(model = c_type)
         new_comment , created = Comment.objects.get_or_create(user = request.user, content_type = content_type, object_id=object_id, content = content_data, )
         if created:
