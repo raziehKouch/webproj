@@ -1,30 +1,30 @@
 {% extends "blog/base.html" %}
 
-
+{% load crispy_forms_tags %}
 {% block content %}
 
-        <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-            </div>
-            <h2><a class="article-title">{{ post.title }}</a></h2>
-                {% if post.post_pic %}
-            <p class="article-content"><img class="rounded mx-auto d-block" src="{{ post.post_pic.url }}"></p>
-              {% endif %}
-    <a class="likebutton" id="like{{post.id}}" href="#" data-catid="{{ post.id }}">Like</a>
-                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+            <div>{{comment.content}}</div>
+    <footer>{{comment.user}} | {{comment.timestamp}} {% if comment.children.count > 0 %} |{{comment.children.count}} comments {% endif %}</footer>
+    <div class="c2" >
+<hr>
+  {% for child in comment.children %}
+        <blockquote>
+                <div>{{child.content}}</div>
+    <footer>{{child.user}} | {{child.timestamp}}</footer>
+</blockquote>
+{% endfor %}
 
+    <form method="POST">
+        {% csrf_token %}
+        {{ form |crispy}}
+      <input type="hidden" name="parent_id" value="{{ comment.id }}">
+        <input type="submit"class=" btn btn-warning"  value="reply">
+    </form>
+    </div>
 
-              <div>
 
 </div>
+</article>
 
-            <p class="article-content">{{ post.content }}</p>
-          </div>
-
-            {{object}}
-        </article>
 
 {% endblock content %}

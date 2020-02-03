@@ -18,8 +18,42 @@ from .models import Comment
 ...
 def comment_thread(request,id):
     obj = get_object_or_404(Comment, id=id)
-    context = {'object':obj}
-    return render(request, 'blog/comment_thread.html')
+    content_object = obj.content_object
+    content_id = obj.content_object.id
+    initial_data={
+        "content_type":obj.content_type,
+        "object_id":obj.object_id,
+    }
+    print("kkkkkkkkkkkkkkkkkk",obj.id)
+    form = CommentForm(request.POST or None, initial=initial_data)
+    if form.is_valid():
+        print("valiiiiiiiiiiiiiiiiid")
+        c_type = form.cleaned_data.get("content_type")
+        object_id = form.cleaned_data.get("object_id")
+        content_data = form.cleaned_data.get("content")
+        try:
+            print("heeeeeeeeeeeeeeeelo")
+            parent_id = int(request.POST.get("parent_id"))
+        except:
+            print("byeeeeeeeeeeeeee")
+            parent_id = None
+        parent_obj = None
+        if parent_id:
+            parent_qs = Comment.objects.filter(id=parent_id)
+            if parent_qs.exists():
+                parent_obj = parent_qs.first()
+        content_type = ContentType.objects.get(model=c_type)
+        new_comment, created = Comment.objects.get_or_create(user=request.user, content_type=content_type,
+                                                             object_id=object_id, content=content_data,
+                                                             parent=parent_obj)
+        if created:
+            print("workedddddddddddddddddd" , obj.id)
+        return redirect('comment_thread', obj.id)
+    context = {'comment':obj,
+               'form':form
+               }
+    return render(request, 'blog/comment_thread.html',context   )
+
 def likePost(request):
     print("jjjjjjjjjjjjjjjjjjjjjjjjjjj")
     if request.method == 'GET':
@@ -185,13 +219,18 @@ def view_post(request, p_pk):
         try:
             parent_id = int(request.POST.get("parent_id"))
         except:
-            pass
+            parent_id = None
+        parent_obj=None
+        if parent_id:
+            parent_qs = Comment.objects.filter(id= parent_id)
+            if parent_qs.exists() :
+                parent_obj=parent_qs.first()
         content_type = ContentType.objects.get(model = c_type)
-        new_comment , created = Comment.objects.get_or_create(user = request.user, content_type = content_type, object_id=object_id, content = content_data, )
+        new_comment , created = Comment.objects.get_or_create(user = request.user, content_type = content_type, object_id=object_id, content = content_data, parent=parent_obj )
         if created:
             print("worked")
         return redirect('view_post', mypost[0].id)
-
+    print("ooooooooooooooooooooooooooooooooooooooo",c[0].id)
     return render(request, 'blog/view_posts.html', resp)
 
 

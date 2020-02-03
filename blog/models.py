@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -12,10 +13,13 @@ from django.contrib.contenttypes.models import ContentType
 
 # Replace models. Model with MPTT Model
 class CommentManager(models.Manager):
+    def all(self):
+        qs=super(CommentManager,self).filter(parent= None)
+        return qs
     def filter_by_instance(self, instance):
         ct = ContentType.objects.get_for_model(instance.__class__)
         ide = instance.id
-        qs = super(CommentManager,self).filter(content_type=ct, object_id=ide)
+        qs = super(CommentManager,self).filter(content_type=ct, object_id=ide).filter(parent=None)
         return qs
 
 
@@ -37,7 +41,8 @@ class Comment(models.Model):
         if self.parent is not None:
             return False
         return True
-
+    def get_absolute_url(self):
+        return reverse("comment_thread", kwargs={"id":self.id, })
 
 class Chanel(models.Model):
     title = models.CharField(max_length=200)
@@ -70,6 +75,9 @@ class post(models.Model):
     def get_content_type(self):
         ct = ContentType.objects.get_for_model(self.__class__)
         return ct
+    def get_absolute_url(self):
+        return reverse("view_post", kwargs={"p_pk":self.id, })
+
 
 
 class subscribe(models.Model):
