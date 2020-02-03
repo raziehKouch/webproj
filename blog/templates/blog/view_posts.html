@@ -2,7 +2,6 @@
 
 {% load crispy_forms_tags %}
 {% block content %}
-127.0.0.1:8000{{ post.get_absolute_url }}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
@@ -76,11 +75,6 @@
     <footer>{{child.user}} | {{child.timestamp}}{% if child.children.count > 0 %} |{{child.children.count}} comments {% endif %}<a href="#" class="c1" onclick="myFunction({{child.pk}})">Reply</a></footer>
 
 
-
-
-
-
-
              <div class="c2" style="display: none;" id={{child.pk}}>
 
   {% for child2 in child.children %}
@@ -97,13 +91,6 @@
         <input type="submit"class=" btn btn-warning"  value="reply">
     </form>
     </div>
-
-
-
-
-
-
-
 </blockquote>
 {% endfor %}
 
@@ -121,18 +108,26 @@
 </div>
 </article>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
-
-
-function myFunction(id) {
-  var x = document.getElementById(id);
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
 document.getElementById("url").innerHTML = window.location.href
 </script>
 
