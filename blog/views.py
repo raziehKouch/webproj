@@ -1,5 +1,4 @@
 import json
-
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
@@ -14,13 +13,18 @@ from rest_framework import authentication, permissions
 from django.http import HttpResponse
 from django.views import View
 from django.contrib.contenttypes.models import ContentType
+from users.models import profile
 
 
 
 
 def home(request):
+    # following_post_authors = request.user.profile.get_followers(request.user)
+    # print(following_post_authors)
+    # following_post_channels =
+    # followed = post.objects.filter(author__in = following_post_authors)
+    followed = post.objects.filter()
     time_threshold = timezone.now() - timezone.timedelta(days=7)
-    followed = post.objects.all()#todo
     recent = post.objects.all().order_by('-date_posted')
     hot = post.objects.filter(date_posted__gt=time_threshold)#todo.order_('-likes')
     contributed = post.objects.all()#todo
