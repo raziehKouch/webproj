@@ -8,29 +8,39 @@
         <div class="media-body">
           <h2 class="account-heading">{{ requested_user.username }}</h2>
           <p class="text-secondary">{{ requested_user.email }}</p>
-            <ul class="list-group list-group-horizontal-md">
-              <li class="list-group-item text-center">
-                    <h1>{{ following_count}}</h1>
-                    <small class="taxt-muted"> followings</small>
-              </li>
-              <li class="list-group-item text-center">
-                     <h1 class="">{{ follower_count}}</h1>
-                    <small class="taxt-muted"> followers</small>
-              </li>
-              <li class="list-group-item text-center">
-                    <h1>{{ post_count}}</h1>
-                    <small class="taxt-muted">  posts </small>
-              </li>
-            </ul>
+            <div class="w-100">
+                <ul class="list-group list-group-horizontal-md">
+                  <li class="list-group-item text-center">
+                        <h1>{{ following_count}}</h1>
+                        <small class="taxt-muted"> followings</small>
+                  </li>
+                  <li class="list-group-item text-center">
+                         <h1 class="">{{ follower_count}}</h1>
+                        <small class="taxt-muted"> followers</small>
+                  </li>
+                  <li class="list-group-item text-center">
+                        <h1>{{ post_count}}</h1>
+                        <small class="taxt-muted">  posts </small>
+                  </li>
+                </ul>
+            </div>
         </div>
       </div>
-        <a class="btn btn-outline-info"href="{% url 'profile-edit' %}">edit profile</a>
+        {% if requested_user == user %}
+            <a class="btn btn-outline-info"href="{% url 'profile-edit' %}">edit profile</a>
+        {% else %}
+            {% if user.id not in requested_user.profile.get_follower_id %}
+                <a class="btn btn-info"href="{{ requested_user.profile.get_follow_url }}">follow</a>
+            {% else %}
+                <a class="btn btn-danger"href="{{ requested_user.profile.get_follow_url }}">unfollow</a>
+            {% endif %}
+        {% endif %}
         {% for post in posts%}
 		<article class="media content-section">
 			<img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
 		  <div class="media-body">
 			<div class="article-metadata">
-			  <a class="mr-2" href="{% url 'profile'  p_pk=post.author.pk%}">{{ post.author }}</a>
+			  <a class="mr-2" href="{% url 'profile'  p_pk=post.author.pk %}">{{ post.author }}</a>
 			  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
               {% if post.chanel %}
                 <em>in<a class="mr-2" href="#"> {{ post.chanel.title }}</a></em>

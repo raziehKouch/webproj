@@ -7,27 +7,15 @@ from .models import post, Chanel
 from .forms import channelForm, PostForm
 from django.contrib import messages
 from django.utils import timezone
-
+from django.views.generic import RedirectView
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
 from django.http import HttpResponse
 from django.views import View
 from django.contrib.contenttypes.models import ContentType
 
-from .models import  Like
 
-
-def likePost(request):
-    print("jjjjjjjjjjjjjjjjjjjjjjjjjjj")
-    if request.method == 'GET':
-
-        post_id = request.GET['post_id']
-        likedpost = post.obejcts.get(pk=post_id)  # getting the liked posts
-        print("llllllllllllllllllll", likedpost)
-        m = Like(post=likedpost)  # Creating Like Object
-        print("mmmmmmmmmmmmmmmmmm", m)
-        m.save()  # saving it to store in database
-        return HttpResponse("Success!")  # Sending an success response
-    else:
-        return HttpResponse("Request method is not a GET")
 
 
 def home(request):
@@ -135,23 +123,6 @@ def delete_post(request, id, pk=None):
         return render(request, 'blog/channel_detail.html', {'ch_pk':pk})
     return #todo
 
-# def like_post(request, val, p_pk , ch_pk):
-#     mypost = post.objects.filter(id=p_pk)
-#     if val==1:
-#         mypost.like = 1
-#     elif val==2:
-#         mypost.dislike =1
-#     mypost.save()
-#     resp = {'shared_url' : f'127.0.0.1/channels/{ch_pk}/view_post/{p_pk}',
-#             'ch_pk':ch_pk,
-#             'p_pk':p_pk,
-#             'post': mypost,
-#             }
-#     return render(request, 'blog/view_post.html',resp)
-
-
-
-
 def view_post(request, p_pk):
     mypost= post.objects.filter(id = p_pk)
     resp = {'shared_url' : f'127.0.0.1/view_post/{p_pk}',
@@ -159,15 +130,6 @@ def view_post(request, p_pk):
             }
     return render(request, 'blog/view_posts.html', resp)
 
-
-
-# def addMember(request, id):
-#     c = Chanel.objects.filter(id=id)
-#     c.author.add(request.user)
-#     c.save()
-#     return render(request, 'blog/channel.html', )
-#     # ch = Chanel.objects.filter(id = c)
-#     # pass
 
 def addMember(request, id, c):
     u = User.objects.filter(id=id)
@@ -189,3 +151,62 @@ def search(request):
 
 def notification(request):
     return render(request, 'blog/notification.html', {})
+
+
+class postliketoggle(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        obj = get_object_or_404(post, pk=kwargs['p_pk'])
+        likeurl = obj.get_absolute_url()
+        user = self.request.user
+        if user.is_authenticated:
+            print('im in first if')
+            if user in obj.likes.all():
+                print('im in sec1 if')
+                obj.likes.remove(user)
+            else:
+                print('im in sec2 if')
+                obj.likes.add(user)
+        return likeurl
+
+
+class postliketoggle(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        obj = get_object_or_404(post, pk=kwargs['p_pk'])
+        likeurl = obj.get_absolute_url()
+        user = self.request.user
+        if user.is_authenticated:
+            print('im in first if')
+            if user in obj.likes.all():
+                print('im in sec1 if')
+                obj.likes.remove(user)
+            else:
+                print('im in sec2 if')
+                obj.likes.add(user)
+        return likeurl
+
+
+
+class PostLikeToggleAPI(APIView):
+
+    authentication_classes = (authentication.SessionAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def get(self, request, p_pk=None, format=None):
+        obj = get_object_or_404(post, pk=p_pk)
+        user = self.request.user
+        updated = False
+        liked = False
+        if user.is_authenticated:
+            if user in obj.likes.all():
+                liked = False
+                obj.likes.remove(user)
+            else:
+                liked = True
+                obj.likes.add(user)
+            updated = True
+        data = {
+            'updated': updated,
+            'liked': liked,
+            'count': obj.likes.count()
+        }
+        return Response(data)

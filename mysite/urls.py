@@ -26,6 +26,7 @@ urlpatterns = [
     path('register/', user_views.register, name='register'),
     path('edit_profile/', user_views.editprofile, name='profile-edit'),
     path('profile/<int:p_pk>', user_views.profile, name='profile'),
+    path('profile/<int:p_pk>/follow/', user_views.FollowToggle.as_view(), name='follow'),
     path('', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('password_reset/',
@@ -40,6 +41,7 @@ urlpatterns = [
     path('password_reset_compelete/',
          auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
          name='password_reset_complete'),
+
 ]
 
 if settings.DEBUG:

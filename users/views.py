@@ -1,11 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from django.views.generic import RedirectView
+
 from .forms import UserRegisterForm, UserUpdateForm, profileupdateform
 from django.contrib.auth.decorators import login_required
 from .models import profile
 from django.contrib.auth.models import User
 from blog.models import post
+
 
 
 def register(request):
@@ -60,3 +63,15 @@ def profile(request, p_pk):
         'posts' : posts
     }
     return render(request, 'users/profile.html', context)
+
+
+class FollowToggle(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        obj = get_object_or_404(User, pk=kwargs['p_pk'])
+        followurl = obj.profile.get_absolute_url()
+        user = self.request.user
+        if user.is_authenticated:
+            obj.profile.follow_user(user)
+        return followurl
+
+
