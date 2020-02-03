@@ -1,7 +1,6 @@
 from django.conf.urls import url
 from django.urls import path
 from django.views.generic import TemplateView
-
 from . import views
 from .models import post
 urlpatterns = [
@@ -22,6 +21,6 @@ urlpatterns = [
 # {% url 'addAuthorNow' chID=channel.pk uID=u.id %}
     path('search', views.search, name='search'),
     path('notification', views.notification, name='notification'),
-    url(r'^likepost/$', views.likePost, name='likepost'),
-
+    path('view_post/<int:p_pk>/like/', views.postliketoggle.as_view(), name='like'),
+    path('view_post/<int:p_pk>/apilike/', views.PostLikeToggleAPI.as_view(), name='like-api'),
 ]
