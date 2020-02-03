@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import post, Chanel
+from .models import post, Chanel, is_author
 from .forms import channelForm, PostForm
 from django.contrib import messages
 from django.utils import timezone
@@ -175,6 +175,13 @@ def addAuthors(request, id):
         'show_users' : show_users,
     }
     return render(request, 'blog/addAuthors.html', context )
+
+def addAuthorNow(request, chID, uID):
+    channel = Chanel.objects.get(id = chID),
+    auth = User.objects.get(id = uID),
+    if is_author.objects.filter(author=auth, channel=channel).count() == 0:
+        is_author.objects.create(author=auth, channel=channel)
+        messages.success(request, f'New author added!')
 
 def search(request):
     query = request.GET.get('q')

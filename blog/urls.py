@@ -18,6 +18,8 @@ urlpatterns = [
     # path('channels/<int:ch_pk>/like_post/<int:p_pk>/', views.like_post, name='like_post'),
     path('channels/<int:id>/addAuthor', views.addAuthor, name='addAuthor'),
     path('channels/<int:id>/addAuthors', views.addAuthors, name='addAuthors'),
+    path('channels/<int:id>/addAuthorNow', views.addAuthorNow, name='addAuthorNow'),
+# {% url 'addAuthorNow' chID=channel.pk uID=u.id %}
     path('search', views.search, name='search'),
     path('notification', views.notification, name='notification'),
     url(r'^likepost/$', views.likePost, name='likepost'),
