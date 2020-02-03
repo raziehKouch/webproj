@@ -11,10 +11,13 @@
     <h2><a class="article-title">{{ c.title }}</a></h2>
    <p class="article-content">{{ c.description }}</p>
    <br><h4>Rules:</h4> <p class="article-content">{{ c.rules }}</p>
+      <!--{% for auth in channel_auths %}-->
+        <!--<p class="article-content">{{ auth }}</p>-->
+      <!--{% endfor %}-->
       <div style="float:right">
         <a class="glyphicon glyphicon-trash" style="float:right" aria-hidden="true" href="{% url 'delete_channel' id=c.pk %}"></a>
         <a class="glyphicon glyphicon-pencil" style="float:right" aria-hidden="true" href="{% url 'edit_channel' pk=c.pk %}?next={{ request.path|urlencode }}"></a>
-        <a class="glyphicon glyphicon-plus" style="float:right" aria-hidden="true" href="{% url 'addMember' id=c.pk %}"></a>
+        <a class="glyphicon glyphicon-plus" style="float:right" aria-hidden="true" href="{% url 'addAuthor' id=c.pk %}"></a>
       </div>
   </div>
 </article>

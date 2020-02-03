@@ -18,6 +18,7 @@ class Chanel(models.Model):
 
     def get_channel_auths(self):
         author_set = is_author.objects.filter(channel=self)
+        # author_set |= User.objects.filter(id = self.admin.id)
         return author_set
 
 class post(models.Model):
@@ -43,4 +44,4 @@ class is_author(models.Model):
     channel = models.ForeignKey(Chanel, related_name="auth_channel", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.author} is author of {self.channel}'
+        return f'{self.author} is author of {self.channel.title}'

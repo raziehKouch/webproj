@@ -1,0 +1,26 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<h1>Add an author to channel '{{channel.title}}'</h1>
+
+    <form class="form-inline my-2 my-lg-0" action="{% url 'addAuthors' id=channel.pk %}" method="get">
+      <input class="form-control mr-sm-2" name="q" type="search"  placeholder="Search Users" aria-label="Search">
+      <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <br/>
+
+{% for u in show_users %}
+    <div class="content-section">
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+            <div class="media-body">
+              <h2 class="account-heading">{{ u.username }}</h2>
+              <p class="text-secondary">{{ u.email }}</p>
+            <h2><a class="glyphicon glyphicon-plus" style="float:right" aria-hidden="true" href="#"></a></h2>
+            </div>
+        </div>
+    <!-- FORM HERE -->
+    </div>
+{% endfor %}
+
+{% endblock content %}

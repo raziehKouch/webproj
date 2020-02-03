@@ -161,20 +161,20 @@ def view_post(request, p_pk):
             }
     return render(request, 'blog/view_posts.html', resp)
 
+def addAuthor(request, id):
+    context = {
+        'channel' : Chanel.objects.get(id = id),
+    }
+    return render(request, 'blog/addAuthor.html', context )
 
-
-# def addMember(request, id):
-#     c = Chanel.objects.filter(id=id)
-#     c.author.add(request.user)
-#     c.save()
-#     return render(request, 'blog/channel.html', )
-#     # ch = Chanel.objects.filter(id = c)
-#     # pass
-
-def addMember(request, id, c):
-    u = User.objects.filter(id=id)
-    ch = Chanel.objects.filter(id = c)
-    pass
+def addAuthors(request, id):
+    query = request.GET.get('q')
+    show_users = User.objects.filter(username__icontains=query)
+    context = {
+        'channel' : Chanel.objects.get(id = id),
+        'show_users' : show_users,
+    }
+    return render(request, 'blog/addAuthors.html', context )
 
 def search(request):
     query = request.GET.get('q')
