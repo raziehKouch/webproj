@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from blog.models import is_author
+
 
 class profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -17,6 +19,10 @@ class profile(models.Model):
     def get_followers(self):
         follower_set = follow.objects.filter(following=self.user)
         return follower_set
+
+    def get_auth_channels(self):
+        channel_set = is_author.objects.filter(author=self.user)
+        return channel_set
 
 
 class follow(models.Model):

@@ -115,12 +115,14 @@ def edit_post(request, pk):
 
 
 def channel_detail(request, id):
-    user = Chanel.objects.only('id').get(id=id)
-    posts = post.objects.filter(chanel=user)
+    c = Chanel.objects.get(id = id)
+    posts = post.objects.filter(chanel=c)
+    channel_auths = Chanel.get_channel_auths(c)
     context = {
-        'c' : Chanel.objects.filter(id = id)[0],
+        'c' : c,
         'posts': posts,
         'ch_pk': id,
+        'channel_auths' : channel_auths,
     }
     return render(request, 'blog/channel_detail.html', context)
 
