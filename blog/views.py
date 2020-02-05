@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import post, Chanel, is_author
-from .forms import channelForm, PostForm
+from .forms import channelForm, PostForm, CommentForm
 from django.contrib import messages
 from django.utils import timezone
 from django.views.generic import RedirectView
@@ -14,8 +14,60 @@ from django.http import HttpResponse
 from django.views import View
 from django.contrib.contenttypes.models import ContentType
 from users.models import profile
+from .models import Comment
 
 
+def comment_thread(request,id):
+    obj = get_object_or_404(Comment, id=id)
+    content_object = obj.content_object
+    content_id = obj.content_object.id
+    initial_data={
+        "content_type":obj.content_type,
+        "object_id":obj.object_id,
+    }
+    print("kkkkkkkkkkkkkkkkkk",obj.id)
+    form = CommentForm(request.POST or None, initial=initial_data)
+    if form.is_valid():
+        print("valiiiiiiiiiiiiiiiiid")
+        c_type = form.cleaned_data.get("content_type")
+        object_id = form.cleaned_data.get("object_id")
+        content_data = form.cleaned_data.get("content")
+        try:
+            print("heeeeeeeeeeeeeeeelo")
+            parent_id = int(request.POST.get("parent_id"))
+        except:
+            print("byeeeeeeeeeeeeee")
+            parent_id = None
+        parent_obj = None
+        if parent_id:
+            parent_qs = Comment.objects.filter(id=parent_id)
+            if parent_qs.exists():
+                parent_obj = parent_qs.first()
+        content_type = ContentType.objects.get(model=c_type)
+        new_comment, created = Comment.objects.get_or_create(user=request.user, content_type=content_type,
+                                                             object_id=object_id, content=content_data,
+                                                             parent=parent_obj)
+        if created:
+            print("workedddddddddddddddddd" , obj.id)
+        return redirect('comment_thread', obj.id)
+    context = {'comment':obj,
+               'form':form
+               }
+    return render(request, 'blog/comment_thread.html',context   )
+
+def likePost(request):
+    print("jjjjjjjjjjjjjjjjjjjjjjjjjjj")
+    if request.method == 'GET':
+
+        post_id = request.GET['post_id']
+        likedpost = post.obejcts.get(pk=post_id)  # getting the liked posts
+        print("llllllllllllllllllll", likedpost)
+        m = Like(post=likedpost)  # Creating Like Object
+        print("mmmmmmmmmmmmmmmmmm", m)
+        m.save()  # saving it to store in database
+        return HttpResponse("Success!")  # Sending an success response
+    else:
+        return HttpResponse("Request method is not a GET")
 
 
 def home(request):
@@ -131,9 +183,40 @@ def delete_post(request, id, pk=None):
 
 def view_post(request, p_pk):
     mypost= post.objects.filter(id = p_pk)
+    # ct = ContentType.objects.get_for_model(post)
+    # ide = mypost[0].id
+
+    c = Comment.objects.filter_by_instance(mypost[0])
+
+    initial_data={
+        "content_type":mypost[0].get_content_type,
+        "object_id":mypost[0].id,
+    }
+    form = CommentForm(request.POST or None, initial=initial_data)
     resp = {'shared_url' : f'127.0.0.1/view_post/{p_pk}',
-            'post': mypost[0]
+            'post': mypost[0],
+            'comments': c,
+            'form': form,
             }
+    if form.is_valid():
+        c_type = form.cleaned_data.get("content_type")
+        object_id = form.cleaned_data.get("object_id")
+        content_data = form.cleaned_data.get("content")
+        try:
+            parent_id = int(request.POST.get("parent_id"))
+        except:
+            parent_id = None
+        parent_obj=None
+        if parent_id:
+            parent_qs = Comment.objects.filter(id= parent_id)
+            if parent_qs.exists() :
+                parent_obj=parent_qs.first()
+        content_type = ContentType.objects.get(model = c_type)
+        new_comment , created = Comment.objects.get_or_create(user = request.user, content_type = content_type, object_id=object_id, content = content_data, parent=parent_obj )
+        if created:
+            print("worked")
+        return redirect('view_post', mypost[0].id)
+    print("ooooooooooooooooooooooooooooooooooooooo",c[0].id)
     return render(request, 'blog/view_posts.html', resp)
 
 def addAuthor(request, id):
@@ -173,22 +256,6 @@ def search(request):
 
 def notification(request):
     return render(request, 'blog/notification.html', {})
-
-
-class postliketoggle(RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
-        obj = get_object_or_404(post, pk=kwargs['p_pk'])
-        likeurl = obj.get_absolute_url()
-        user = self.request.user
-        if user.is_authenticated:
-            print('im in first if')
-            if user in obj.likes.all():
-                print('im in sec1 if')
-                obj.likes.remove(user)
-            else:
-                print('im in sec2 if')
-                obj.likes.add(user)
-        return likeurl
 
 
 class postliketoggle(RedirectView):

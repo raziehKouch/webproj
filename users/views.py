@@ -5,7 +5,7 @@ from django.views.generic import RedirectView
 
 from .forms import UserRegisterForm, UserUpdateForm, profileupdateform
 from django.contrib.auth.decorators import login_required
-from .models import profile
+# from .models import profile
 from django.contrib.auth.models import User
 from blog.models import post
 

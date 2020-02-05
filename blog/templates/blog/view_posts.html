@@ -1,7 +1,8 @@
 {% extends "blog/base.html" %}
 {% load staticfiles %}
-
+{% load crispy_forms_tags %}
 {% block content %}
+127.0.0.1:8000{{ post.get_absolute_url }}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
@@ -28,10 +29,126 @@
               {% if post.post_pic %}
             <p class="article-content"><img class="rounded mx-auto d-block" src="{{ post.post_pic.url }}"></p>
               {% endif %}
+
+              <a  class="glyphicon glyphicon-share"   href="#" data-toggle="modal" data-target="#myModal"></a>
+<!--              <p id="urlCopied"></p>-->
+
+              <div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Post link</h4>
+      </div>
+      <div class="modal-body">
+        <p id="url"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+
+              <div>
+
+</div>
+
               <a class="glyphicon glyphicon-trash" style="float:right" aria-hidden="true" href="{% url 'delete_post' id=post.pk %}"></a>
               <a class="glyphicon glyphicon-pencil" style="float:right" aria-hidden="true" href="{% url 'edit_post' post.pk %}?next={{ request.path }}"></a>
             <p class="article-content">{{ post.content }}</p>
           </div>
         </article>
+<article class="media content-section">
+<div class="media-body">
+        <p class="lead">Comments <br>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form |crispy}}
+        <input type="submit"class=" btn btn-warning"  value="send">
+    </form>
+<!--        {{ post.comments }}-->
+
+            {% for comment in post.comments %}
+    <blockquote>
+            <div>{{comment.content}}</div>
+    <footer>{{comment.user}} | {{comment.timestamp}} {% if comment.children.count > 0 %} |{{comment.children.count}} comments {% endif %}<a href="#" class="c1" onclick="myFunction({{comment.pk}})">Reply</a>
+    <a href="{{ comment.get_absolute_url }}">Thread</a>
+    </footer>
+    <div class="c2" style="display: none;" id={{comment.pk}}>
+
+  {% for child in comment.children %}
+        <blockquote>
+                <div>{{child.content}}</div>
+    <footer>{{child.user}} | {{child.timestamp}}{% if child.children.count > 0 %} |{{child.children.count}} comments {% endif %}<a href="#" class="c1" onclick="myFunction({{child.pk}})">Reply</a></footer>
+
+
+
+
+
+
+
+             <div class="c2" style="display: none;" id={{child.pk}}>
+
+  {% for child2 in child.children %}
+        <blockquote>
+                <div>{{child2.content}}</div>
+    <footer>{{child2.user}} | {{child2.timestamp}}</footer><a href="#" class="c1" onclick="myFunction({{child.pk}})">Reply</a>
+</blockquote>
+{% endfor %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form |crispy}}
+      <input type="hidden" name="parent_id" value="{{ child.id }}">
+        <input type="submit"class=" btn btn-warning"  value="reply">
+    </form>
+    </div>
+
+
+
+
+
+
+
+</blockquote>
+{% endfor %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form |crispy}}
+      <input type="hidden" name="parent_id" value="{{ comment.id }}">
+        <input type="submit"class=" btn btn-warning"  value="reply">
+    </form>
+    </div>
+        </blockquote>
+    <hr>
+            {% endfor %}
+
+</div>
+</article>
+
+<script>
+
+
+function myFunction(id) {
+  var x = document.getElementById(id);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+document.getElementById("url").innerHTML = window.location.href
+</script>
 
 {% endblock content %}

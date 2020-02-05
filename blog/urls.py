@@ -14,6 +14,7 @@ urlpatterns = [
     path('channels/<int:id>/delete_channel', views.delete_channel, name='delete_channel'),
     path('channels/<int:id>/delete_post', views.delete_post, name='delete_post'),
     path('view_post/<int:p_pk>', views.view_post, name='view_post'),
+    path('view_post_c/<int:id>', views.comment_thread, name='comment_thread'),
     # path('channels/<int:ch_pk>/like_post/<int:p_pk>/', views.like_post, name='like_post'),
     path('channels/<int:id>/addAuthor', views.addAuthor, name='addAuthor'),
     path('channels/<int:id>/addAuthors', views.addAuthors, name='addAuthors'),
