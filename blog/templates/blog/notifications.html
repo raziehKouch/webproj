@@ -1,0 +1,9 @@
+{% extends "blog/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <h1>{{ user.username }} notifications</h1>
+    {% for notif in user.notifications.unread %}
+        <div>{{ notif.sender_content_object.username }}  {{ notif.description }}</div>
+    {% endfor %}
+{% endblock content %}

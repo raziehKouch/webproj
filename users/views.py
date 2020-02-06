@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.views.generic import RedirectView
-
+from notifications.signals import notify
 from .forms import UserRegisterForm, UserUpdateForm, profileupdateform
 from django.contrib.auth.decorators import login_required
 from .models import profile
@@ -81,6 +81,7 @@ class FollowToggle(RedirectView):
         user = self.request.user
         if user.is_authenticated:
             obj.profile.follow_user(user)
+            notify.send(sender=user ,recipient=obj, verb="follower", description= user.username + " started following you!")
         return followurl
 
 

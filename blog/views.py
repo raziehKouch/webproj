@@ -14,6 +14,7 @@ from rest_framework import authentication, permissions
 from django.http import HttpResponse
 from django.views import View
 from django.contrib.contenttypes.models import ContentType
+from notifications.models import Notification
 
 
 
@@ -149,9 +150,6 @@ def search(request):
     }
     return render(request, 'blog/search.html', context)
 
-def notification(request):
-    return render(request, 'blog/notification.html', {})
-
 
 class postliketoggle(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
@@ -238,3 +236,8 @@ class PostDisLikeToggleAPI(APIView):
             'count': obj.dislikes.count()
         }
         return Response(data)
+
+
+def notifications(request):
+
+    return render(request, "blog/notifications.html")
