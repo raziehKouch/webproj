@@ -1,0 +1,30 @@
+{% extends "blog/base.html" %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+
+            <div>{{comment.content}}</div>
+    <footer>{{comment.user}} | {{comment.timestamp}} {% if comment.children.count > 0 %} |{{comment.children.count}} comments {% endif %}</footer>
+    <div class="c2" >
+<hr>
+  {% for child in comment.children %}
+        <blockquote>
+                <div>{{child.content}}</div>
+    <footer>{{child.user}} | {{child.timestamp}}</footer>
+</blockquote>
+{% endfor %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form |crispy}}
+      <input type="hidden" name="parent_id" value="{{ comment.id }}">
+        <input type="submit"class=" btn btn-warning"  value="reply">
+    </form>
+    </div>
+
+
+</div>
+</article>
+
+
+{% endblock content %}
