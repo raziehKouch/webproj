@@ -26,6 +26,9 @@ def register(request):
 
 @login_required
 def editprofile(request):
+    following_count = request.user.profile.get_followings().count()
+    follower_count = request.user.profile.get_followers().count()
+    post_count = post.objects.filter(author = request.user ).count()
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST ,instance=request.user)
         p_form = profileupdateform(request.POST ,request.FILES, instance=request.user.profile)
@@ -33,13 +36,15 @@ def editprofile(request):
             u_form.save()
             p_form.save()
             messages.success(request, f'Your account has been updated!')
-            return redirect('profile')
+            context = {
+                'following_count': following_count,
+                'follower_count': follower_count,
+                'post_count': post_count,
+            }
+            return redirect('profile', context)
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = profileupdateform(instance=request.user.profile)
-        following_count = request.user.profile.get_followings().count()
-        follower_count = request.user.profile.get_followers().count()
-        post_count = post.objects.filter(author = request.user ).count()
     context = {
         'u_form': u_form,
         'p_form': p_form,

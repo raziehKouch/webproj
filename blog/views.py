@@ -216,7 +216,6 @@ def view_post(request, p_pk):
         if created:
             print("worked")
         return redirect('view_post', mypost[0].id)
-    print("ooooooooooooooooooooooooooooooooooooooo",c[0].id)
     return render(request, 'blog/view_posts.html', resp)
 
 def addAuthor(request, id):
