@@ -15,6 +15,7 @@ from django.views import View
 from django.contrib.contenttypes.models import ContentType
 from users.models import profile
 from .models import Comment
+from django.db.models import Count
 
 
 def comment_thread(request,id):
@@ -76,8 +77,8 @@ def home(request):
     followed = post.objects.filter(author__in = following_post_authors)
     time_threshold = timezone.now() - timezone.timedelta(days=7)
     recent = post.objects.all().order_by('-date_posted')
-    hot = post.objects.filter(date_posted__gt=time_threshold)#todo.order_('-likes')
-    contributed = post.objects.all()#todo
+    hot = post.objects.filter(date_posted__gt=time_threshold).annotate(like_count = Count('likes')).order_by('-like_count')
+    contributed = post.objects.filter()#todo
     context = {
         'followed' : followed,
         'recent' : recent,
