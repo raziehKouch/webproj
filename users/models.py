@@ -45,7 +45,6 @@ class profile(models.Model):
         return reverse('follow', kwargs={'p_pk': self.user.pk})
 
 
-
 class follow(models.Model):
     follower = models.ForeignKey(User, related_name="follower", on_delete=models.CASCADE)
     following = models.ForeignKey(User, related_name="friend_set", on_delete=models.CASCADE)

@@ -8,20 +8,18 @@ function myFunction(id) {
   }
 }
 
-function Copy(){
- var textArea = document.createElement("textarea");
-  textArea.value = text;
-  textArea.style.position="fixed";  //avoid scrolling to bottom
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
+function share() {
 
-      var text = document.createElement("textarea");
-                text.innerHTML = window.location.href;
-//                alert(text.innerHTML)
-                Copied = text.createTextRange();
-                Copied.select();
-                Copied.setSelectionRange(0, 99999)
-                Copied.execCommand("Copy");
-                alert("copied",window.location.href )
+  var copyGfGText = document.getElementById("url");
+  copyGfGText.select();
+  document.execCommand("copy");
+
 }
+function commentshare() {
+
+  var copyGfGText = document.getElementById("url2");
+  copyGfGText.select();
+  document.execCommand("copy");
+
+}
+

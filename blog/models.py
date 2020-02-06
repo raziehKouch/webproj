@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db.models import Sum
-
+from tinymce.models import HTMLField
 from mptt.models import MPTTModel, TreeForeignKey
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -31,6 +31,8 @@ class Comment(models.Model):
     object_id = models.PositiveIntegerField(null=True)
     content_object = GenericForeignKey('content_type', 'object_id')
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
+    upvote = models.ManyToManyField(User, blank=True, related_name="comment_upvote")
+    downvote = models.ManyToManyField(User, blank=True, related_name="comment_downvote")
     objects = CommentManager()
     class Meta:
         ordering = ['-timestamp']
@@ -44,6 +46,23 @@ class Comment(models.Model):
     def get_absolute_url(self):
         return reverse("comment_thread", kwargs={"id":self.id, })
 
+    def get_absolute_url2(self):
+        return reverse("view_post", kwargs={"p_pk":self.object_id, })
+
+    def get_upvote_url(self):
+        return reverse('upvote', kwargs={'id': self.pk})
+
+    def get_downvote_url(self):
+        return reverse('downvote', kwargs={'id': self.pk})
+
+    def get_downvote_api_url(self):
+        return reverse('downvote-api', kwargs={'id': self.pk})
+
+    def get_upvote_api_url(self):
+        return reverse('upvote-api', kwargs={'id': self.pk})
+
+
+
 class Chanel(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -51,6 +70,7 @@ class Chanel(models.Model):
     admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_admin')
     # authors = models.ManyToManyField(User, related_name='%(class)s_authors')
     # followers = models.ManyToManyField(User, related_name='%(class)s_followers')
+    timestamp = models.DateTimeField(default=timezone.now)
 
     def get_channel_auths(self):
         return is_author.objects.filter(channel=self).values('author')
@@ -86,7 +106,6 @@ class Chanel(models.Model):
             is_author.objects.create(author=auth, channel=self)
         else:
             is_author.objects.filter(author=auth, channel=self).delete()
-
 
 class post(models.Model):
 

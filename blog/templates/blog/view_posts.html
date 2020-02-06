@@ -42,10 +42,16 @@
             {% endif %}
 
               {% if post.post_pic %}
-            <p class="article-content"><img class="rounded mx-auto d-block" src="{{ post.post_pic.url }}"></p>
+                <p class="article-content"><img class="rounded mx-auto d-block img-responsive" src="{{ post.post_pic.url }}"></p>
               {% endif %}
 
-              <a  class="glyphicon glyphicon-share"   href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a  class="glyphicon glyphicon-share"  onclick="share()" href="#" data-toggle="modal" data-target="#myModal"></a>
+
+
+
+
+
+
 <!--              <p id="urlCopied"></p>-->
 
               <div id="myModal" class="modal fade" role="dialog">
@@ -54,11 +60,17 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
+                  <h4 class="left">Post link</h4>
+
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Post link</h4>
       </div>
       <div class="modal-body">
-        <p id="url"></p>
+          <input type="url" value="{{ post.get_absolute_url }}" id="url" >
+          <div>
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_url }}" class="fa fa-facebook" ></a>
+              <a href="https://twitter.com/home?status={{ post.title }}%20{{ request.build_absolute_url }}" class="fa fa-twitter"></a>
+              <a href="http://www.reddit.com/submit?url={{ request.build_absolute_url }}&title={{ post.title }}" class="fa fa-reddit"> </a>
+</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -76,12 +88,16 @@
 
 </div>
 
-              <a class="glyphicon glyphicon-trash" style="float:right" aria-hidden="true" href="{% url 'delete_post' id=post.pk %}"></a>
-              <a class="glyphicon glyphicon-pencil" style="float:right" aria-hidden="true" href="{% url 'edit_post' post.pk %}?next={{ request.path }}"></a>
             <p class="article-content">{{ post.content }}</p>
           </div>
+
+<a class="glyphicon glyphicon-trash right"  aria-hidden="true" href="{% url 'delete_post' id=post.pk %}?next={{ request.path }}"></a>
+              <a class="glyphicon glyphicon-pencil right"  aria-hidden="true" href="{% url 'edit_post' post.pk %}?next={{ request.path }}"></a>
+
         </article>
 <article class="media content-section">
+                   <input type="hidden" name="next" value="{{ request.GET.next }}">
+
 <div class="media-body">
         <p class="lead">Comments <br>
 
@@ -93,51 +109,81 @@
 <!--        {{ post.comments }}-->
 
             {% for comment in post.comments %}
+    {{ comment.get_absolute_url }}
     <blockquote>
             <div>{{comment.content}}</div>
     <footer>{{comment.user}} | {{comment.timestamp}} {% if comment.children.count > 0 %} |{{comment.children.count}} comments {% endif %}<a href="#" class="c1" onclick="myFunction({{comment.pk}})">Reply</a>
-    <a href="{{ comment.get_absolute_url }}">Thread</a>
+     <a class="glyphicon glyphicon-trash"  aria-hidden="true" href="{% url 'delete_comment' p_pk=post.pk c_pk=comment.pk %}"></a>
+    <a class="glyphicon glyphicon-pencil"  aria-hidden="true" href="{% url 'edit_comment' c_pk=comment.pk p_pk=post.pk %}?next={{ request.path }}"></a>
+        <a  class="glyphicon glyphicon-share"  onclick="commentshare()" href="#" data-toggle="modal" data-target="#myModal2"></a>
+
+
+         {% if request.user in comment.upvote.all %}
+              <span>
+                <a class="like-btn" data-href="{{ comment.get_upvote_api_url }}" data-likes="{{ comment.upvote.count }}" href="{{ comment.get_upvote_url }}">
+                  <img src="{% static 'blog/images/thumbu.png' %}" width="30" height="30" class="d-inline-block align-top\" alt="">
+                  <span class='ml-3'>{{ comment.upvote.count }}</span>
+                </a>
+              </span>
+            {% else %}
+                <span>
+                <a class="like-btn" data-href="{{ comment.get_upvote_api_url }}" data-likes="{{ comment.upvote.count }}" href="{{ comment.get_upvote_url }}">
+                  <img src="{% static 'blog/images/thumbd.png' %}" width="30" height="30" class="d-inline-block align-top\" alt="">
+                  <span class='ml-3'>{{ comment.upvote.count }}</span>
+                </a>
+              </span>
+            {% endif %}
+
+            {% if request.user in comment.downvote.all %}
+              <span>
+                <a class="dislike-btn" data-href="{{ comment.get_downvote_api_url }}" data-likes="{{ comment.downvote.count }}" href="{{ comment.get_downvote_url }}">
+                  <img src="{% static 'blog/images/unthumbd.png' %}" width="30" height="30" class="d-inline-block align-top\" alt="">
+                  <span class='ml-3'>{{ comment.downvote.count }}</span>
+                </a>
+              </span>
+            {% else %}
+                <span>
+                <a class="dislike-btn" data-href="{{ comment.get_downvote_api_url }}" data-likes="{{ comment.downvote.count }}" href="{{ comment.get_downvote_url }}">
+                  <img src="{% static 'blog/images/unthumbu.png' %}" width="30" height="30" class="d-inline-block align-top\" alt="">
+                  <span class='ml-3'>{{ comment.downvote.count }}</span>
+                </a>
+              </span>
+            {% endif %}
+
+
     </footer>
-    <div class="c2" style="display: none;" id={{comment.pk}}>
+    <div style="display: none;" id={{comment.pk}}>
 
   {% for child in comment.children %}
         <blockquote>
                 <div>{{child.content}}</div>
     <footer>{{child.user}} | {{child.timestamp}}{% if child.children.count > 0 %} |{{child.children.count}} comments {% endif %}<a href="#" class="c1" onclick="myFunction({{child.pk}})">Reply</a></footer>
+     <a class="glyphicon glyphicon-trash"  aria-hidden="true" href="{% url 'delete_comment' p_pk=post.pk c_pk=child.pk %}"></a>
+    <a class="glyphicon glyphicon-pencil" aria-hidden="true" href="{% url 'edit_comment' c_pk=child.pk p_pk=post.pk %}?next={{ request.path }}"></a>
 
 
-
-
-
-
-
-             <div class="c2" style="display: none;" id={{child.pk}}>
+             <div style="display: none;" id={{child.pk}}>
 
   {% for child2 in child.children %}
         <blockquote>
                 <div>{{child2.content}}</div>
-    <footer>{{child2.user}} | {{child2.timestamp}}</footer><a href="#" class="c1" onclick="myFunction({{child.pk}})">Reply</a>
+    <footer>{{child2.user}} | {{child2.timestamp}}     <a class="glyphicon glyphicon-trash"  aria-hidden="true" href="{% url 'delete_comment' p_pk=post.pk c_pk=child2.pk %}"></a><a class="glyphicon glyphicon-pencil"   aria-hidden="true" href="{% url 'edit_comment' c_pk=child2.pk p_pk=post.pk %}?next={{ request.path }}"></a>
+
+</footer>
 </blockquote>
 {% endfor %}
 
-    <form method="POST">
+    <form method="POST" class="c2" >
         {% csrf_token %}
         {{ form |crispy}}
       <input type="hidden" name="parent_id" value="{{ child.id }}">
         <input type="submit"class=" btn btn-warning"  value="reply">
     </form>
     </div>
-
-
-
-
-
-
-
 </blockquote>
 {% endfor %}
 
-    <form method="POST">
+    <form method="POST" class="c2" >
         {% csrf_token %}
         {{ form |crispy}}
       <input type="hidden" name="parent_id" value="{{ comment.id }}">
@@ -146,6 +192,37 @@
     </div>
         </blockquote>
     <hr>
+
+
+
+
+          <div id="myModal2" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+                  <h4  class="left" >Comment link</h4>
+
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+          <input type="url"  id="url2" value="{{ request.build_absolute_url }}">
+          <div>
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_url }}" class="fa fa-facebook" ></a>
+              <a href="https://twitter.com/home?status={{ post.title }}%20{{ request.build_absolute_url }}" class="fa fa-twitter"></a>
+              <a href="http://www.reddit.com/submit?url={{ request.build_absolute_url }}&title={{ post.title }}" class="fa fa-reddit"> </a>
+</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
             {% endfor %}
 
 </div>
@@ -153,17 +230,9 @@
 
 <script>
 
-
-function myFunction(id) {
-  var x = document.getElementById(id);
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
 document.getElementById("url").innerHTML = window.location.href
+document.getElementById("url").value = window.location.href
+
 </script>
 
 {% endblock content %}

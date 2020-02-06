@@ -14,7 +14,8 @@
       <!--{% for auth in channel_auths %}-->
         <!--<p class="article-content">{{ auth }}</p>-->
       <!--{% endfor %}-->
-      <div style="float:right">
+      {% if request.user == c.admin or request.user in c.authors %}
+      <div class="right">
           {% if user.id not in c.get_channel_members_id %}
             <a type="button" class="btn btn-warning" href="{{ c.follow_channel_url }}">Follow Channel</a>
           {% else %}
@@ -26,14 +27,15 @@
           <a class="glyphicon glyphicon-plus" style="float:right; padding:2px;" aria-hidden="true" href="{% url 'addAuthor' id=c.pk %}"></a>
           <a class="glyphicon glyphicon-minus" style="float:right; padding:2px;" aria-hidden="true" href="{% url 'subAuthor' id=c.pk %}"></a>
       </div>
+      {% endif %}
   </div>
 </article>
 
-<h1>Channel Posts</h1>
+<h1 class="infinite-container">Channel Posts</h1>
 {% if posts %}
     {% for post in posts %}
         <!--post preview-->
-		<article class="media content-section">
+		<article class="media content-section infinite-item" >
         <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
 		  <div class="media-body">
 			<div class="article-metadata">
@@ -56,7 +58,28 @@
           </div>
 		</article>
     {% endfor %}
+<div class="pagination">
+    <span class="step-links">
+        {% if posts.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ posts.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+        </span>
+
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">next</a>
+            <a href="?page={{ posts.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
 {% endif %}
+{% if request.user == c.admin  %}
 <a  type="button" class="btn btn-warning" href="{% url 'newPost' ch_pk %}">New Post</a>
+{% endif %}
+
 
 {% endblock content %}
