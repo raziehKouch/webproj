@@ -16,11 +16,13 @@ urlpatterns = [
     path('view_post/<int:p_pk>', views.view_post, name='view_post'),
     path('view_post_c/<int:id>', views.comment_thread, name='comment_thread'),
     # path('channels/<int:ch_pk>/like_post/<int:p_pk>/', views.like_post, name='like_post'),
+    path('channels/<int:id>/subAuthor', views.subAuthor, name='subAuthor'),
     path('channels/<int:id>/addAuthor', views.addAuthor, name='addAuthor'),
     path('channels/<int:id>/addAuthors', views.addAuthors, name='addAuthors'),
     path('channels/<int:chID>/addAuthorNow/<int:uID>', views.addAuthorNow, name='addAuthorNow'),
     path('channels/<int:chID>/subAuthorNow/<int:uID>', views.subAuthorNow, name='subAuthorNow'),
 # {% url 'addAuthorNow' chID=channel.pk uID=u.id %}
+    path('channels/<int:chID>/followChannel/<int:uID>', views.followChannel, name='followChannel'),
     path('search', views.search, name='search'),
     path('notification', views.notification, name='notification'),
     path('view_post/<int:p_pk>/like/', views.postliketoggle.as_view(), name='like'),

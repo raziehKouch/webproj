@@ -2,7 +2,7 @@ import json
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import post, Chanel, is_author
+from .models import post, Chanel, is_author, is_member
 from .forms import channelForm, PostForm, CommentForm
 from django.contrib import messages
 from django.utils import timezone
@@ -213,6 +213,13 @@ def view_post(request, p_pk):
         return redirect('view_post', mypost[0].id)
     return render(request, 'blog/view_posts.html', resp)
 
+def subAuthor(request, id):
+    context = {
+        'channel' : Chanel.objects.get(id = id),
+    }
+    return render(request, 'blog/subAuthor.html', context )
+
+
 def addAuthor(request, id):
     context = {
         'channel' : Chanel.objects.get(id = id),
@@ -231,9 +238,9 @@ def addAuthors(request, id):
 def addAuthorNow(request, chID, uID):
     print ('in addAuthorNow......................')
     channel = Chanel.objects.get(id = chID),
-    print ('----------------channel:----------', channel[0])
+    # print ('----------------channel:----------', channel[0])
     auth = User.objects.get(id = uID),
-    print ('----------------author:----------', auth[0])
+    # print ('----------------author:----------', auth[0])
     if is_author.objects.filter(author=auth, channel=channel).count() == 0:
         is_author.objects.create(author=auth, channel=channel)
     else:
@@ -241,14 +248,23 @@ def addAuthorNow(request, chID, uID):
 
 def subAuthorNow(request, chID, uID):
     channel = Chanel.objects.get(id = chID),
-    print ('----------------channel:----------', channel[0])
+    # print ('----------------channel:----------', channel[0])
     auth = User.objects.get(id = uID),
-    print ('----------------author:----------', auth[0])
+    # print ('----------------author:----------', auth[0])
     if is_author.objects.filter(author=auth, channel=channel).count() == 0:
         is_author.objects.remove(author=auth, channel=channel)
     else:
         messages.warning(request, f'Not an author!')
 
+def followChannel(request, chID, uID):
+    channel = Chanel.objects.get(id=chID),
+    member = User.objects.get(id=uID),
+    if is_member.objects.filter(member=member, channel=channel).count() == 0:
+        is_member.objects.create(member=member, channel=channel)
+        messages.success(request, f'Channel followed successfully!')
+    else:
+        is_member.objects.remove(member=member, channel=channel)
+        messages.success(request, f'Channel unfollowed successfully!')
 
 def search(request):
     query = request.GET.get('q')

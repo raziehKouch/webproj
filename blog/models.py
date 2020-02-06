@@ -50,7 +50,7 @@ class Chanel(models.Model):
     rules = models.TextField()
     admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_admin')
     # authors = models.ManyToManyField(User, related_name='%(class)s_authors')
-    followers = models.ManyToManyField(User, related_name='%(class)s_followers')
+    # followers = models.ManyToManyField(User, related_name='%(class)s_followers')
 
     def get_channel_auths(self):
         return is_author.objects.filter(channel=self).values('author')
@@ -58,9 +58,11 @@ class Chanel(models.Model):
     def get_channel_auths_id(self):
         return is_author.objects.filter(channel=self).values_list('author', flat=True)
 
-    def get_followers(self):
-        follower_set = subscribe.objects.filter(following_channel=self)
-        return follower_set
+    def get_channel_members(self):
+        return is_member.objects.filter(channel=self).values('member')
+
+    def get_channel_members_id(self):
+        return is_member.objects.filter(channel=self).values_list('member', flat=True)
 
 
 class post(models.Model):
@@ -108,3 +110,11 @@ class is_author(models.Model):
 
     def __str__(self):
         return f'{self.author} is author of {self.channel.title}'
+
+
+class is_member(models.Model):
+    member = models.ForeignKey(User, related_name="member", on_delete=models.CASCADE)
+    channel = models.ForeignKey(Chanel, related_name="mem_channel", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.member} is a member of {self.channel.title}'

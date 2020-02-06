@@ -15,9 +15,16 @@
         <!--<p class="article-content">{{ auth }}</p>-->
       <!--{% endfor %}-->
       <div style="float:right">
-        <a class="glyphicon glyphicon-trash" style="float:right" aria-hidden="true" href="{% url 'delete_channel' id=c.pk %}"></a>
-        <a class="glyphicon glyphicon-pencil" style="float:right" aria-hidden="true" href="{% url 'edit_channel' pk=c.pk %}?next={{ request.path|urlencode }}"></a>
-        <a class="glyphicon glyphicon-plus" style="float:right" aria-hidden="true" href="{% url 'addAuthor' id=c.pk %}"></a>
+          {% if user.id not in c.get_channel_members_id %}
+            <a type="button" class="btn btn-warning" href="{% url 'followChannel' chID=c.pk uID=user.id %}">Follow Channel</a>
+          {% else %}
+            <a type="button" class="btn btn-danger" href="{% url 'followChannel' chID=c.pk uID=user.id %}">Unfollow Channel</a>
+          {% endif %}
+          <br/><br/>
+          <a class="glyphicon glyphicon-trash" style="float:right; padding:2px;" aria-hidden="true" href="{% url 'delete_channel' id=c.pk %}"></a>
+          <a class="glyphicon glyphicon-pencil" style="float:right; padding:2px;" aria-hidden="true" href="{% url 'edit_channel' pk=c.pk %}?next={{ request.path|urlencode }}"></a>
+          <a class="glyphicon glyphicon-plus" style="float:right; padding:2px;" aria-hidden="true" href="{% url 'addAuthor' id=c.pk %}"></a>
+          <a class="glyphicon glyphicon-minus" style="float:right; padding:2px;" aria-hidden="true" href="{% url 'subAuthor' id=c.pk %}"></a>
       </div>
   </div>
 </article>
