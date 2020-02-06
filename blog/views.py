@@ -71,11 +71,10 @@ def likePost(request):
 
 
 def home(request):
-    # following_post_authors = request.user.profile.get_followers(request.user)
-    # print(following_post_authors)
-    # following_post_channels =
-    # followed = post.objects.filter(author__in = following_post_authors)
-    followed = post.objects.filter()
+    following_post_authors = request.user.profile.get_followings()
+    print(following_post_authors)
+    # following_post_channels = #todo: add posts with the channel we are following (notice: beware of duplicates)
+    followed = post.objects.filter(author__in = following_post_authors)
     time_threshold = timezone.now() - timezone.timedelta(days=7)
     recent = post.objects.all().order_by('-date_posted')
     hot = post.objects.filter(date_posted__gt=time_threshold)#todo.order_('-likes')
@@ -116,12 +115,9 @@ def newPost(request,pk):
             ch.author = request.user
             c = Chanel.objects.get(id = pk)
             ch.save()
-            print("@@@@@@@@@@@@@@@@@@@ before",c,ch.chanel)
             ch.chanel = c
             ch.save()
-            print("@@@@@@@@@@@@@@@@@@@",c,ch.chanel)
-
-            return HttpResponseRedirect('channel_detail', messages.success(request, 'Post created.'))
+            return HttpResponseRedirect('channel_detail', messages.success(request, 'Post created.'))#todo
     else:
         form = PostForm()
     return render(request, 'blog/newPost.html', {'form': form})
@@ -238,7 +234,9 @@ def addAuthorNow(request, chID, uID):
     auth = User.objects.get(id = uID),
     if is_author.objects.filter(author=auth, channel=channel).count() == 0:
         is_author.objects.create(author=auth, channel=channel)
-        messages.success(request, f'New author added!')
+    else:
+        messages.warning(request, f'already an author!')
+
 
 def search(request):
     query = request.GET.get('q')

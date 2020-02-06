@@ -14,15 +14,15 @@ class profile(models.Model):
         return f'{self.user.username} profile'
 
     def get_followings(self):
-        following_set = follow.objects.filter(follower=self.user)
+        following_set = follow.objects.filter(follower=self.user).values('following')
         return following_set
 
     def get_followers(self):
-        follower_set = follow.objects.filter(following=self.user)
+        follower_set = follow.objects.filter(following=self.user).values('follower')
         return follower_set
 
     def get_auth_channels(self):
-        channel_set = is_author.objects.filter(author=self.user)
+        channel_set = is_author.objects.filter(author=self.user).values('channel')
         return channel_set
 
     def follow_user(self, ruser):
