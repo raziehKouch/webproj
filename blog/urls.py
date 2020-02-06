@@ -19,10 +19,10 @@ urlpatterns = [
     path('channels/<int:id>/subAuthor', views.subAuthor, name='subAuthor'),
     path('channels/<int:id>/addAuthor', views.addAuthor, name='addAuthor'),
     path('channels/<int:id>/addAuthors', views.addAuthors, name='addAuthors'),
-    path('channels/<int:chID>/addAuthorNow/<int:uID>', views.addAuthorNow, name='addAuthorNow'),
-    path('channels/<int:chID>/subAuthorNow/<int:uID>', views.subAuthorNow, name='subAuthorNow'),
+    path('channels/<int:chID>/addAuthorNow/<int:uID>', views.AddAuthorToggle.as_view(), name='addAuthorNow'),
+    # path('channels/<int:chID>/subAuthorNow/<int:uID>', views.subAuthorNow, name='subAuthorNow'),
 # {% url 'addAuthorNow' chID=channel.pk uID=u.id %}
-    path('channels/<int:chID>/followChannel/<int:uID>', views.followChannel, name='followChannel'),
+    path('channels/<int:chID>/followChannel', views.FollowChannelToggle.as_view(), name='followChannel'),
     path('search', views.search, name='search'),
     path('notification', views.notification, name='notification'),
     path('view_post/<int:p_pk>/like/', views.postliketoggle.as_view(), name='like'),

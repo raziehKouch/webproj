@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
-from blog.models import is_author
+from blog.models import is_author, is_member
 
 
 class profile(models.Model):
@@ -21,8 +21,10 @@ class profile(models.Model):
         return follower_set
 
     def get_auth_channels(self):
-        channel_set = is_author.objects.filter(author=self.user).values('channel')
-        return channel_set
+        return is_author.objects.filter(author=self.user).values('channel')
+
+    def get_following_channels(self):
+        return is_member.objects.filter(member=self.user).values('channel')
 
     def follow_user(self, ruser):
         if follow.objects.filter(following=self.user, follower = ruser).count() == 0:
@@ -39,8 +41,6 @@ class profile(models.Model):
     def get_follow_url(self):
         return reverse('follow', kwargs={'p_pk': self.user.pk})
 
-    # def get_authChannels_url(self):
-    #     return reverse('is_author', kwargs={'p_pk': self.user.pk})
 
 
 class follow(models.Model):

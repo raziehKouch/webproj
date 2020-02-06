@@ -12,14 +12,14 @@
 {% for u in show_users %}
     <div class="content-section">
         <div class="media">
-            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+            <img class="rounded-circle account-img" src="{{ u.profile.image.url }}">
             <div class="media-body">
               <h2 class="account-heading">{{ u.username }}</h2>
               <p class="text-secondary">{{ u.email }}</p>
             {% if u.id not in channel.get_channel_auths_id %}
-                <h2><a class="glyphicon glyphicon-plus" style="float:right" aria-hidden="true" href="{% url 'addAuthorNow' chID=channel.pk uID=u.id %}"></a></h2>
+                <h2><a class="glyphicon glyphicon-plus" style="float:right" aria-hidden="true" href="#"></a></h2>
             {% else %}
-                <h2><a class="glyphicon glyphicon-minus" style="float:right" aria-hidden="true" href="{% url 'subAuthorNow' chID=channel.pk uID=u.id %}"></a></h2>
+                <h2><a class="glyphicon glyphicon-minus" style="float:right" aria-hidden="true" href="#"></a></h2>
             {% endif %}
             </div>
         </div>

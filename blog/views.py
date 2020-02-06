@@ -73,12 +73,12 @@ def likePost(request):
 
 def home(request):
     following_post_authors = request.user.profile.get_followings()
-    # following_post_channels = #todo: add posts with the channel we are following (notice: beware of duplicates)
-    followed = post.objects.filter(author__in = following_post_authors)
+    following_post_channels = request.user.profile.get_following_channels() #todo: add posts with the channel we are following (notice: beware of duplicates)
+    followed = post.objects.filter(author__in = following_post_authors) | post.objects.filter(chanel__in = following_post_channels)
     time_threshold = timezone.now() - timezone.timedelta(days=7)
     recent = post.objects.all().order_by('-date_posted')
     hot = post.objects.filter(date_posted__gt=time_threshold).annotate(like_count = Count('likes')).order_by('-like_count')
-    contributed = post.objects.filter()#todo
+    contributed = post.objects.filter(author=request.user)#todo commented on
     context = {
         'followed' : followed,
         'recent' : recent,
@@ -236,36 +236,23 @@ def addAuthors(request, id):
     }
     return render(request, 'blog/addAuthors.html', context )
 
-def addAuthorNow(request, chID, uID):
-    print ('in addAuthorNow......................')
-    channel = Chanel.objects.get(id = chID),
-    # print ('----------------channel:----------', channel[0])
-    auth = User.objects.get(id = uID),
-    # print ('----------------author:----------', auth[0])
-    if is_author.objects.filter(author=auth, channel=channel).count() == 0:
-        is_author.objects.create(author=auth, channel=channel)
-    else:
-        messages.warning(request, f'Is already an author!')
+class FollowChannelToggle(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        obj = get_object_or_404(Chanel, pk=kwargs['chID'])
+        followurl = obj.get_absolute_url()
+        user = self.request.user
+        if user.is_authenticated:
+            obj.follow_channel(user)
+        return followurl
 
-def subAuthorNow(request, chID, uID):
-    channel = Chanel.objects.get(id = chID),
-    # print ('----------------channel:----------', channel[0])
-    auth = User.objects.get(id = uID),
-    # print ('----------------author:----------', auth[0])
-    if is_author.objects.filter(author=auth, channel=channel).count() == 0:
-        is_author.objects.remove(author=auth, channel=channel)
-    else:
-        messages.warning(request, f'Not an author!')
-
-def followChannel(request, chID, uID):
-    channel = Chanel.objects.get(id=chID),
-    member = User.objects.get(id=uID),
-    if is_member.objects.filter(member=member, channel=channel).count() == 0:
-        is_member.objects.create(member=member, channel=channel)
-        messages.success(request, f'Channel followed successfully!')
-    else:
-        is_member.objects.remove(member=member, channel=channel)
-        messages.success(request, f'Channel unfollowed successfully!')
+class AddAuthorToggle(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        obj = get_object_or_404(Chanel, pk=kwargs['chID'])
+        url = obj.get_absolute_url()
+        user = get_object_or_404(User, pk=kwargs['uID'])
+        # todo: if self.request.user.is_channelAdmin:
+        obj.addAuthorNow(user)
+        return url
 
 def search(request):
     query = request.GET.get('q')

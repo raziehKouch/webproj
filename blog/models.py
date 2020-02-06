@@ -64,6 +64,29 @@ class Chanel(models.Model):
     def get_channel_members_id(self):
         return is_member.objects.filter(channel=self).values_list('member', flat=True)
 
+    def follow_channel_url(self):
+        return reverse('followChannel', kwargs={'chID':self.pk})
+
+    def add_author_url(self, uID):
+        return reverse('addAuthorNow', kwargs={'chID':self.pk, 'uID':uID})
+
+    def get_absolute_url(self):
+        return reverse('channel_detail', kwargs={'id': self.pk})
+
+    def follow_channel(self, user):
+        member = user
+        if is_member.objects.filter(member=member, channel=self).count() == 0:
+            is_member.objects.create(member=member, channel=self)
+        else:
+            is_member.objects.filter(member=member, channel=self).delete()
+
+    def addAuthorNow(self, user):
+        auth = user,
+        if is_author.objects.filter(author=auth, channel=self).count() == 0:
+            is_author.objects.create(author=auth, channel=self)
+        else:
+            is_author.objects.filter(author=auth, channel=self).delete()
+
 
 class post(models.Model):
 

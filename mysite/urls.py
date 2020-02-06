@@ -26,7 +26,6 @@ urlpatterns = [
     path('', include('blog.urls')),
     url(r'^accounts/', include('allauth.urls')),
     path('', include('social_django.urls', namespace='social')),
-    # path('accounts/google/login/callback/', home, name='home'),
     path('register/', user_views.register, name='register'),
     path('edit_profile/', user_views.editprofile, name='profile-edit'),
     path('profile/<int:p_pk>', user_views.profile, name='profile'),
