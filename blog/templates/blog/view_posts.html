@@ -13,15 +13,31 @@
             {% if request.user in post.likes.all %}
               <p>
                 <a class="like-btn" data-href="{{ post.get_like_api_url }}" data-likes="{{ post.likes.count }}" href="{{ post.get_like_url }}">
-                  <img src="{% static 'blog/liked.png' %}" width="30" height="30" class="d-inline-block align-top\" alt="">
+                  <img src="{% static 'blog/thumbu.png' %}" width="30" height="30" class="d-inline-block align-top\" alt="">
                   <small class='ml-3'>{{ post.likes.count }}</small>
                 </a>
               </p>
             {% else %}
                 <p>
                 <a class="like-btn" data-href="{{ post.get_like_api_url }}" data-likes="{{ post.likes.count }}" href="{{ post.get_like_url }}">
-                  <img src="{% static 'blog/unliked.png' %}" width="30" height="30" class="d-inline-block align-top\" alt="">
+                  <img src="{% static 'blog/unthumbu.png' %}" width="30" height="30" class="d-inline-block align-top\" alt="">
                   <small class='ml-3'>{{ post.likes.count }}</small>
+                </a>
+              </p>
+            {% endif %}
+
+            {% if request.user in post.dislikes.all %}
+              <p>
+                <a class="dislike-btn" data-href="{{ post.get_dislike_api_url }}" data-likes="{{ post.dislikes.count }}" href="{{ post.get_dislike_url }}">
+                  <img src="{% static 'blog/thumbd.png' %}" width="30" height="30" class="d-inline-block align-top\" alt="">
+                  <small class='ml-3'>{{ post.dislikes.count }}</small>
+                </a>
+              </p>
+            {% else %}
+                <p>
+                <a class="dislike-btn" data-href="{{ post.get_dislike_api_url }}" data-likes="{{ post.dislikes.count }}" href="{{ post.get_dislike_url }}">
+                  <img src="{% static 'blog/unthumbd.png' %}" width="30" height="30" class="d-inline-block align-top\" alt="">
+                  <small class='ml-3'>{{ post.dislikes.count }}</small>
                 </a>
               </p>
             {% endif %}

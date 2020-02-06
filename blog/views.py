@@ -300,6 +300,23 @@ class postliketoggle(RedirectView):
         return likeurl
 
 
+class postDisliketoggle(RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        obj = get_object_or_404(post, pk=kwargs['p_pk'])
+        dislikeurl = obj.get_absolute_url()
+        user = self.request.user
+        if user.is_authenticated:
+            print('im in first if')
+            if user in obj.dislikes.all():
+                print('im in sec1 if')
+                obj.dislikes.remove(user)
+            else:
+                print('im in sec2 if')
+                obj.dislikes.add(user)
+        return dislikeurl
+
+
 
 class PostLikeToggleAPI(APIView):
 
@@ -323,5 +340,32 @@ class PostLikeToggleAPI(APIView):
             'updated': updated,
             'liked': liked,
             'count': obj.likes.count()
+        }
+        return Response(data)
+
+
+class PostDisLikeToggleAPI(APIView):
+
+    authentication_classes = (authentication.SessionAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def get(self, request, p_pk=None, format=None):
+
+        obj = get_object_or_404(post, pk=p_pk)
+        user = self.request.user
+        updated = False
+        disliked = False
+        if user.is_authenticated:
+            if user in obj.dislikes.all():
+                disliked = False
+                obj.dislikes.remove(user)
+            else:
+                disliked = True
+                obj.dislikes.add(user)
+            updated = True
+        data = {
+            'updated': updated,
+            'disliked': disliked,
+            'count': obj.dislikes.count()
         }
         return Response(data)

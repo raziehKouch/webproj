@@ -27,4 +27,6 @@ urlpatterns = [
     path('notification', views.notification, name='notification'),
     path('view_post/<int:p_pk>/like/', views.postliketoggle.as_view(), name='like'),
     path('view_post/<int:p_pk>/apilike/', views.PostLikeToggleAPI.as_view(), name='like-api'),
+    path('view_post/<int:p_pk>/dislike/', views.postDisliketoggle.as_view(), name='dislike'),
+    path('view_post/<int:p_pk>/apidislike/', views.PostDisLikeToggleAPI.as_view(), name='dislike-api'),
 ]

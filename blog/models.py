@@ -74,12 +74,19 @@ class post(models.Model):
     chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE, null=True, blank= True)
     post_pic = models.ImageField(upload_to='post_picd', null=True, blank=True)
     likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
+    dislikes = models.ManyToManyField(User, blank=True, related_name='post_dislikes')
 
     def get_absolute_url(self):
         return reverse('view_post', kwargs={'p_pk': self.pk})
 
     def get_like_url(self):
         return reverse('like', kwargs={'p_pk': self.pk})
+
+    def get_dislike_url(self):
+        return reverse('dislike', kwargs={'p_pk': self.pk})
+
+    def get_dislike_api_url(self):
+        return reverse('dislike-api', kwargs={'p_pk': self.pk})
 
     def get_like_api_url(self):
         return reverse('like-api', kwargs={'p_pk': self.pk})
