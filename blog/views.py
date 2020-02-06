@@ -24,6 +24,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.db.models import Count
+from notifications.models import Notification
 
 PAGE = 3
 
@@ -386,8 +387,6 @@ def search(request):
     }
     return render(request, 'blog/search.html', context)
 
-def notification(request):
-    return render(request, 'blog/notification.html', {})
 
 class postliketoggle(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
@@ -557,3 +556,7 @@ class CommentDownvoteToggleAPI(APIView):
             'count': obj.downvote.count()
         }
         return Response(data)
+
+
+def notifications(request):
+    return render(request, "blog/notifications.html")

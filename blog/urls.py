@@ -27,7 +27,7 @@ urlpatterns = [
 # {% url 'addAuthorNow' chID=channel.pk uID=u.id %}
     path('channels/<int:chID>/followChannel', views.FollowChannelToggle.as_view(), name='followChannel'),
     path('search', views.search, name='search'),
-    path('notification', views.notification, name='notification'),
+    path('notification/', views.notifications, name='notification'),
     path('view_post/<int:p_pk>/like/', views.postliketoggle.as_view(), name='like'),
     path('view_post/<int:p_pk>/apilike/', views.PostLikeToggleAPI.as_view(), name='like-api'),
     path('view_post/<int:p_pk>/dislike/', views.postDisliketoggle.as_view(), name='dislike'),
