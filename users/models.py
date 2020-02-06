@@ -10,8 +10,8 @@ class profile(models.Model):
     bio = models.TextField(max_length=500)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
-    def __str__(self):
-        return f'{self.user.username} profile'
+    # def __str__(self):
+    #     return f'{self.user.username} profile'
 
     def get_followings(self):
         following_set = follow.objects.filter(follower=self.user).values('following')
@@ -39,6 +39,9 @@ class profile(models.Model):
 
     def get_follow_url(self):
         return reverse('follow', kwargs={'p_pk': self.user.pk})
+
+    # def get_authChannels_url(self):
+    #     return reverse('is_author', kwargs={'p_pk': self.user.pk})
 
 
 class follow(models.Model):

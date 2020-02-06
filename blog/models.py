@@ -53,9 +53,10 @@ class Chanel(models.Model):
     followers = models.ManyToManyField(User, related_name='%(class)s_followers')
 
     def get_channel_auths(self):
-        author_set = is_author.objects.filter(channel=self)
-        # author_set |= User.objects.filter(id = self.admin.id)
-        return author_set
+        return is_author.objects.filter(channel=self).values('author')
+
+    def get_channel_auths_id(self):
+        return is_author.objects.filter(channel=self).values_list('author', flat=True)
 
     def get_followers(self):
         follower_set = subscribe.objects.filter(following_channel=self)

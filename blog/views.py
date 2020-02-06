@@ -72,7 +72,6 @@ def likePost(request):
 
 def home(request):
     following_post_authors = request.user.profile.get_followings()
-    print(following_post_authors)
     # following_post_channels = #todo: add posts with the channel we are following (notice: beware of duplicates)
     followed = post.objects.filter(author__in = following_post_authors)
     time_threshold = timezone.now() - timezone.timedelta(days=7)
@@ -230,12 +229,25 @@ def addAuthors(request, id):
     return render(request, 'blog/addAuthors.html', context )
 
 def addAuthorNow(request, chID, uID):
+    print ('in addAuthorNow......................')
     channel = Chanel.objects.get(id = chID),
+    print ('----------------channel:----------', channel[0])
     auth = User.objects.get(id = uID),
+    print ('----------------author:----------', auth[0])
     if is_author.objects.filter(author=auth, channel=channel).count() == 0:
         is_author.objects.create(author=auth, channel=channel)
     else:
-        messages.warning(request, f'already an author!')
+        messages.warning(request, f'Is already an author!')
+
+def subAuthorNow(request, chID, uID):
+    channel = Chanel.objects.get(id = chID),
+    print ('----------------channel:----------', channel[0])
+    auth = User.objects.get(id = uID),
+    print ('----------------author:----------', auth[0])
+    if is_author.objects.filter(author=auth, channel=channel).count() == 0:
+        is_author.objects.remove(author=auth, channel=channel)
+    else:
+        messages.warning(request, f'Not an author!')
 
 
 def search(request):
