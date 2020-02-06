@@ -26,6 +26,11 @@ def register(request):
 
 @login_required
 def editprofile(request):
+    following_count = request.user.profile.get_followings().count()
+    follower_count = request.user.profile.get_followers().count()
+    post_count = post.objects.filter(author=request.user).count()
+    posts = post.objects.filter(author=request.user)
+    ruser = request.user
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST ,instance=request.user)
         p_form = profileupdateform(request.POST ,request.FILES, instance=request.user.profile)
@@ -33,13 +38,17 @@ def editprofile(request):
             u_form.save()
             p_form.save()
             messages.success(request, f'Your account has been updated!')
-            return redirect('profile')
+            context = {
+                'following_count': following_count,
+                'follower_count': follower_count,
+                'post_count': post_count,
+                'posts': posts,
+                'requested_user': ruser
+            }
+            return render(request, 'users/profile.html', context)
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = profileupdateform(instance=request.user.profile)
-        following_count = request.user.profile.get_followings().count()
-        follower_count = request.user.profile.get_followers().count()
-        post_count = post.objects.filter(author = request.user ).count()
     context = {
         'u_form': u_form,
         'p_form': p_form,
@@ -51,14 +60,14 @@ def editprofile(request):
 
 def profile(request, p_pk):
     ruser = User.objects.get(pk = p_pk)
-    following_count = ruser.profile.get_followings().count()
-    follower_count = ruser.profile.get_followers().count()
+    following_count = ruser.profile.get_followings()
+    follower_count = ruser.profile.get_followers()
     post_count = post.objects.filter(author=ruser).count()
     posts = post.objects.filter(author=ruser)
     context = {
         'requested_user': ruser,
-        'following_count' : following_count,
-        'follower_count' : follower_count,
+        'following' : following_count,
+        'follower' : follower_count,
         'post_count': post_count,
         'posts' : posts
     }

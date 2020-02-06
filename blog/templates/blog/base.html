@@ -78,12 +78,12 @@
                           if (verb === "Like"){
                               btn.replaceWith(
                                   $("<a class=\"like-btn\" data-href=\"{{ post.get_like_api_url }}\" data-likes=\"{{ post.likes.count }} \" href=\"{{ post.get_like_url }}\"> " +
-                                      "<img src=\"{% static 'blog/unliked.png' %}\" width=\"30\" height=\"30\" class=\"d-inline-block align-top\" alt=\"\">" +  "<small class='ml-3'>" + newCount +  "</small></a>"))
+                                      "<img src=\"{% static 'blog/unthumbu.png' %}\" width=\"30\" height=\"30\" class=\"d-inline-block align-top\" alt=\"\">" +  "<small class='ml-3'>" + newCount +  "</small></a>"))
                           }
                           if (verb === "Unlike"){
                               btn.replaceWith(
                                   $("<a class=\"like-btn\" data-href=\"{{ post.get_like_api_url }}\" data-likes=\"{{ post.likes.count }} \" href=\"{{ post.get_like_url }}\"> " +
-                                      "<img src=\"{% static 'blog/liked.png' %}\" width=\"30\" height=\"30\" class=\"d-inline-block align-top\" alt=\"\"></a>" +  "<small class='ml-3'>" + newCount +  "</small></a>"))
+                                      "<img src=\"{% static 'blog/thumbu.png' %}\" width=\"30\" height=\"30\" class=\"d-inline-block align-top\" alt=\"\"></a>" +  "<small class='ml-3'>" + newCount +  "</small></a>"))
                           }
                   }
 
@@ -103,6 +103,51 @@
                               updateText(this_, data.count, "Unlike")
                           } else {
                               updateText(this_, data.count , "Like")
+                              // remove one like
+                          }
+                        }, error: function(error){
+                          console.log(error)
+                          console.log("error")
+                        }
+                      })
+                    }
+
+                  })
+              })
+
+    </script>
+              <script>
+                  $(document).ready(function(){
+                      function updateText(btn, newCount, verb){
+                      btn.text(newCount + " " + verb)
+                          if (verb === "disLike"){
+                              btn.replaceWith(
+                                  $("<a class=\"dislike-btn\" data-href=\"{{ post.get_dislike_api_url }}\" data-likes=\"{{ post.dislikes.count }} \" href=\"{{ post.get_dislike_url }}\"> " +
+                                      "<img src=\"{% static 'blog/unthumbd.png' %}\" width=\"30\" height=\"30\" class=\"d-inline-block align-top\" alt=\"\">" +  "<small class='ml-3'>" + newCount +  "</small></a>"))
+                          }
+                          if (verb === "Undislike"){
+                              btn.replaceWith(
+                                  $("<a class=\"dislike-btn\" data-href=\"{{ post.get_dislike_api_url }}\" data-likes=\"{{ post.dislikes.count }} \" href=\"{{ post.get_dislike_url }}\"> " +
+                                      "<img src=\"{% static 'blog/thumbd.png' %}\" width=\"30\" height=\"30\" class=\"d-inline-block align-top\" alt=\"\"></a>" +  "<small class='ml-3'>" + newCount +  "</small></a>"))
+                          }
+                  }
+
+                 $(".dislike-btn").click(function(e){
+                    e.preventDefault()
+                    var this_ = $(this)
+                    var dislikeUrl = this_.attr("data-href")
+                    if (dislikeUrl){
+                       $.ajax({
+                        url: dislikeUrl,
+                        method: "GET",
+                        data: {},
+                        success: function(data){
+                          console.log(data)
+                          var newLikes;
+                          if (data.disliked === true){
+                              updateText(this_, data.count, "Undislike")
+                          } else {
+                              updateText(this_, data.count , "disLike")
                               // remove one like
                           }
                         }, error: function(error){

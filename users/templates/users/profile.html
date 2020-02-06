@@ -11,12 +11,12 @@
             <div class="w-100">
                 <ul class="list-group list-group-horizontal-md">
                   <li class="list-group-item text-center">
-                        <h1>{{ following_count}}</h1>
-                        <small class="taxt-muted"> followings</small>
+                        <h1 data-toggle="modal" data-target="#followingmodal">{{ following.count}}</h1>
+                        <small class="taxt-muted" data-toggle="modal" data-target="#followingmodal"> followings </small>
                   </li>
                   <li class="list-group-item text-center">
-                         <h1 class="">{{ follower_count}}</h1>
-                        <small class="taxt-muted"> followers</small>
+                         <h1 class="">{{ follower.count }}</h1>
+                        <small class="taxt-muted" data-toggle="modal" data-target="#followermodal"> followers</small>
                   </li>
                   <li class="list-group-item text-center">
                         <h1>{{ post_count}}</h1>
@@ -51,6 +51,65 @@
 		  </div>
 		</article>
 	{% endfor %}
+
+        <div class="modal fade" id="followingmodal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">followings</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                    {% for u in following %}
+                        <div class="content-section">
+                        <div class="media">
+                            <img class="rounded-circle account-img" src="{{ u.following.profile.image.url }}">
+                            <div class="media-body">
+                              <h2 class="account-heading" >{{ u.following.username }}</h2>
+                                <a href="{% url 'profile' p_pk=u.following.pk %}" class="btn btn-primary">view prfile</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+            <div class="modal fade" id="followermodal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="followermodalLabel">followers</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                    {% for u in follower %}
+                        <div class="content-section">
+                        <div class="media">
+                            <img class="rounded-circle account-img" src="{{ u.follower.profile.image.url }}">
+                            <div class="media-body">
+                              <h2 class="account-heading" >{{ u.follower.username }}</h2>
+                                <a href="{% url 'profile' p_pk=u.follower.pk %}" class="btn btn-primary">view prfile</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
 
 {% endblock content %}

@@ -9,7 +9,7 @@ urlpatterns = [
     path('newChannel', views.newChannel , name='newChannel'),
     path('channels/<int:pk>/edit/', views.edit_channel, name='edit_channel'),
     path('channels/<int:pk>/editpost/', views.edit_post, name='edit_post'),
-    path('channels/<int:id>/Channeldetail', views.channel_detail, name='channel_detail'),
+    path('channels/<int:id>/channel_detail', views.channel_detail, name='channel_detail'),
     path('channels/<int:pk>/newPost', views.newPost, name='newPost'),
     path('channels/<int:id>/delete_channel', views.delete_channel, name='delete_channel'),
     path('channels/<int:id>/delete_post', views.delete_post, name='delete_post'),
@@ -19,4 +19,6 @@ urlpatterns = [
     path('notification', views.notification, name='notification'),
     path('view_post/<int:p_pk>/like/', views.postliketoggle.as_view(), name='like'),
     path('view_post/<int:p_pk>/apilike/', views.PostLikeToggleAPI.as_view(), name='like-api'),
+    path('view_post/<int:p_pk>/dislike/', views.postDisliketoggle.as_view(), name='dislike'),
+    path('view_post/<int:p_pk>/apidislike/', views.PostDisLikeToggleAPI.as_view(), name='dislike-api'),
 ]
