@@ -42,7 +42,11 @@
               {% if post.chanel %}
                 <em>in<a class="mr-2" href="{% url 'channel_detail' id=post.chanel.pk %}"> {{ post.chanel.title }}</a></em>
               {% endif %}
-              <small class="text-muted" style="float:right">10 likes (todo)</small>
+              <small class="text-muted" style="float:right">{{ post.dislikes.count }}</small>
+              <small class="text-muted" style="float:right; padding:2px;"><a class="glyphicon glyphicon-thumbs-down" style="float:right" aria-hidden="true"></a></small>
+              <small class="text-muted" style="float:right; padding:5px"></small>
+			  <small class="text-muted" style="float:right">{{ post.likes.count }}</small>
+              <small class="text-muted" style="float:right; padding:2px;"><a class="glyphicon glyphicon-thumbs-up" style="float:right" aria-hidden="true"></a></small>
 			</div>
 			<h2><a class="article-title" href="{% url 'view_post' p_pk=post.pk %}">{{ post.title }}</a></h2>
 			{% if post.post_pic %}
