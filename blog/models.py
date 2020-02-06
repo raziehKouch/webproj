@@ -95,7 +95,9 @@ class post(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE, null=True, blank= True)
-    post_pic = models.ImageField(upload_to='post_picd', null=True, blank=True)
+    h=models.PositiveIntegerField(null=True, blank=True, default='100')
+    w=models.PositiveIntegerField(null=True, blank=True, default='100')
+    post_pic = models.ImageField(upload_to='post_picd', null=True, blank=True, height_field='h', width_field = 'w')
     likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
     dislikes = models.ManyToManyField(User, blank=True, related_name='post_dislikes')
 

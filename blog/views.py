@@ -73,12 +73,13 @@ def likePost(request):
 
 def home(request):
     following_post_authors = request.user.profile.get_followings()
-    following_post_channels = request.user.profile.get_following_channels() #todo: add posts with the channel we are following (notice: beware of duplicates)
+    following_post_channels = request.user.profile.get_following_channels()
     followed = post.objects.filter(author__in = following_post_authors) | post.objects.filter(chanel__in = following_post_channels)
     time_threshold = timezone.now() - timezone.timedelta(days=7)
     recent = post.objects.all().order_by('-date_posted')
     hot = post.objects.filter(date_posted__gt=time_threshold).annotate(like_count = Count('likes')).order_by('-like_count')
-    contributed = post.objects.filter(author=request.user)#todo commented on
+    user_comments = request.user.profile.get_comments().values('object_id')
+    contributed = post.objects.filter(author = request.user) | post.objects.filter(id__in=user_comments)
     context = {
         'followed' : followed,
         'recent' : recent,
