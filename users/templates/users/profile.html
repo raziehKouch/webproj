@@ -27,8 +27,7 @@
         </div>
       </div>
         {% if requested_user == user %}
-             <a  class="glyphicon glyphicon-share"  onclick="GeeksForGeeks()" href="#" data-toggle="modal" data-target="#myModal"></a>
-
+            <a  class="glyphicon glyphicon-share"  onclick="share()" href="#" data-toggle="modal" data-target="#myModal"></a>
             <a class="btn btn-outline-info"href="{% url 'profile-edit' %}">edit profile</a>
             <a class="btn btn-outline-info"href="{% url 'newPostProfile' pk=user.pk %}?next={{ request.path|urlencode ">new post</a>
 
@@ -39,6 +38,8 @@
                 <a class="btn btn-danger"href="{{ requested_user.profile.get_follow_url }}">unfollow</a>
             {% endif %}
         {% endif %}
+    </div>
+<h1 class="infinite-container">User Posts</h1>
         {% for post in posts%}
 		<!--post preview-->
 		<article class="media content-section">
@@ -93,7 +94,6 @@
             </div>
           </div>
         </div>
-    </div>
 
             <div class="modal fade" id="followermodal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
@@ -123,7 +123,6 @@
             </div>
           </div>
         </div>
-    </div>
 
 
  <div id="myModal" class="modal fade" role="dialog">
@@ -147,19 +146,5 @@
 
   </div>
 </div>
-function GeeksForGeeks() {
-  /* Get the text field */
-
-  var copyGfGText = document.getElementById("url");
-
-  /* Select the text field */
-  copyGfGText.select();
-
-  /* Copy the text inside the text field */
-  document.execCommand("copy");
-
-}
-document.getElementById("url").innerHTML = window.location.href
-document.getElementById("url").value = window.location.href
 
 {% endblock content %}
