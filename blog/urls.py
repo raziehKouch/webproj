@@ -9,10 +9,13 @@ urlpatterns = [
     path('newChannel', views.newChannel , name='newChannel'),
     path('channels/<int:pk>/edit/', views.edit_channel, name='edit_channel'),
     path('channels/<int:pk>/editpost/', views.edit_post, name='edit_post'),
-    path('channels/<int:id>/Channeldetail', views.channel_detail, name='channel_detail'),
+    path('channels/<int:p_pk>/editcomment/<int:c_pk>', views.edit_comment, name='edit_comment'),
+    path('channels/<int:id>/channel_detail', views.channel_detail, name='channel_detail'),
     path('channels/<int:pk>/newPost', views.newPost, name='newPost'),
     path('channels/<int:id>/delete_channel', views.delete_channel, name='delete_channel'),
     path('channels/<int:id>/delete_post', views.delete_post, name='delete_post'),
+    path('channels/<int:p_pk>/delete_comment/<int:c_pk>', views.delete_comment, name='delete_comment'),
+
     path('view_post/<int:p_pk>', views.view_post, name='view_post'),
     path('view_post_c/<int:id>', views.comment_thread, name='comment_thread'),
     # path('channels/<int:ch_pk>/like_post/<int:p_pk>/', views.like_post, name='like_post'),
@@ -24,4 +27,11 @@ urlpatterns = [
     path('notification', views.notification, name='notification'),
     path('view_post/<int:p_pk>/like/', views.postliketoggle.as_view(), name='like'),
     path('view_post/<int:p_pk>/apilike/', views.PostLikeToggleAPI.as_view(), name='like-api'),
+    path('view_post/<int:p_pk>/dislike/', views.postDisliketoggle.as_view(), name='dislike'),
+    path('view_post/<int:p_pk>/apidislike/', views.PostDisLikeToggleAPI.as_view(), name='dislike-api'),
+
+    path('view_post_c/<int:id>/upvote', views.CommentUpvoteToggle.as_view(), name='upvote'),
+    path('view_post_c/<int:id>/upvote-api', views.CommentUpvoteAPI.as_view(), name='upvote-api'),
+    path('view_post_c/<int:id>/downvote', views.CommentDownvoteToggle.as_view(), name='downvote'),
+    path('view_post_c/<int:id>/downvote-api', views.CommentDownvoteToggleAPI.as_view(), name='downvote-api'),
 ]

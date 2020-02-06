@@ -12,5 +12,23 @@
         </article>
     {% endfor %}
 
+<div class="pagination">
+    <span class="step-links">
+        {% if channels.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ channels.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ channels.number }} of {{ channels.paginator.num_pages }}.
+        </span>
+
+        {% if channels.has_next %}
+            <a href="?page={{ channels.next_page_number }}">next</a>
+            <a href="?page={{ channels.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
 <a type="button" class="btn btn-warning" href="{% url 'newChannel' %}">New Channel</a>
 {% endblock content %}

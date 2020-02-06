@@ -59,13 +59,14 @@ def profile(request, p_pk):
     following_count = ruser.profile.get_followings().count()
     follower_count = ruser.profile.get_followers().count()
     post_count = post.objects.filter(author=ruser).count()
-    posts = post.objects.filter(author=ruser)
+    posts = post.objects.filter(author=ruser).order_by("-date_posted")
     context = {
         'requested_user': ruser,
         'following_count' : following_count,
         'follower_count' : follower_count,
         'post_count': post_count,
-        'posts' : posts
+        'posts' : posts,
+
     }
     return render(request, 'users/profile.html', context)
 

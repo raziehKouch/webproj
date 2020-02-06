@@ -22,7 +22,7 @@ class profile(models.Model):
         return follower_set
 
     def get_auth_channels(self):
-        channel_set = is_author.objects.filter(author=self.user)
+        channel_set = is_author.objects.filter(author=self.user).values("channel")
         return channel_set
 
     def follow_user(self, ruser):

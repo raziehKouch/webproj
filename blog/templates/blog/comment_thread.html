@@ -14,11 +14,11 @@
 </blockquote>
 {% endfor %}
 
-    <form method="POST">
+    <form method="POST" >
         {% csrf_token %}
         {{ form |crispy}}
-      <input type="hidden" name="parent_id" value="{{ comment.id }}">
-        <input type="submit"class=" btn btn-warning"  value="reply">
+      <input type="hidden" name="parent_id" value="{{ c.id }}">
+        <input type="submit"class=" btn btn-warning"  value="edit">
     </form>
     </div>
 

@@ -40,6 +40,35 @@
           </div>
 		</article>
 	{% endfor %}
+
+
+
+
+
+
+		<div class="pagination">
+    <span class="step-links">
+        {% if followed.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ followed.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ followed.number }} of {{ followed.paginator.num_pages }}.
+        </span>
+
+        {% if followed.has_next %}
+            <a href="?page={{ followed.next_page_number }}">next</a>
+            <a href="?page={{ followed.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+
+
+
+
+
 	</div>
 	<div id="recent" class="tab-pane fade in">
 	  {% for post in recent %}
@@ -63,6 +92,27 @@
           </div>
 		</article>
 	{% endfor %}
+
+
+
+				<div class="pagination">
+    <span class="step-links">
+        {% if recent.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ recent.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ recent.number }} of {{ recent.paginator.num_pages }}.
+        </span>
+
+        {% if followed.has_next %}
+            <a href="?page={{ recent.next_page_number }}">next</a>
+            <a href="?page={{ recent.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
 	</div>
 	<div id="hot" class="tab-pane fade in">
 	{% for post in hot %}
@@ -86,6 +136,26 @@
           </div>
 		</article>
 	{% endfor %}
+
+
+				<div class="pagination">
+    <span class="step-links">
+        {% if hot.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ hot.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ hot.number }} of {{ hot.paginator.num_pages }}.
+        </span>
+
+        {% if followed.has_next %}
+            <a href="?page={{ hot.next_page_number }}">next</a>
+            <a href="?page={{ hot.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
 	</div>
 	<div id="contributed" class="tab-pane fade in">
 	{% for post in contributed %}
@@ -110,6 +180,10 @@
           </div>
 		</article>
 	{% endfor %}
+
+
+
+
 	</div>
 </div>
 {% endblock content %}
